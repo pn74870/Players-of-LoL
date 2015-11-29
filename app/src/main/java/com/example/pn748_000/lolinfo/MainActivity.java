@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.navigation_item_3:
                 toolbar.setTitle(R.string.navigation_item_3);
                 if (summonerJsonObject != null) {
-                  //  getActiveMattch(); //TODO // FIXME: 11/28/2015 
+                  startActivity(new Intent(this,ActiveMatchActivity.class));
                 } else {
                     Toast.makeText(this, "Enter the summoner name", Toast.LENGTH_SHORT).show();
                     mDrawerLayout.closeDrawers();

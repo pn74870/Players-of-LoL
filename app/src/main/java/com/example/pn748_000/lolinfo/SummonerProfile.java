@@ -28,11 +28,11 @@ import static com.example.pn748_000.lolinfo.Keys.PNG;
 //import static com.example.pn748_000.lolinfo.Keys.VERSION;
 
 
-public class SummonerProfile extends Fragment  {
+public class SummonerProfile extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_REGION = "region";
-    private static final String ARG_SUMMONER= "summoner";
+    private static final String ARG_SUMMONER = "summoner";
 
 
     // TODO: Rename and change types of parameters
@@ -40,10 +40,10 @@ public class SummonerProfile extends Fragment  {
     VolleySingleton volleySingleton;
     RequestQueue requestQueue;
     private OnSummonerProfileInteractionListener mListener;
-    TextView nameTextView, levelTxt,regionTxt;
+    TextView nameTextView, levelTxt, regionTxt;
     ImageView profileIconImageView;
     LinearLayout leagueLayout;
-    TextView[] ranks,lpTxts;
+    TextView[] ranks, lpTxts, wlTexts;
     ImageView[] tierIcons;
     private Summoner summoner;
 
@@ -51,7 +51,7 @@ public class SummonerProfile extends Fragment  {
     public static SummonerProfile newInstance(Summoner summoner) {
         SummonerProfile fragment = new SummonerProfile();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_SUMMONER,summoner);
+        args.putParcelable(ARG_SUMMONER, summoner);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,8 +67,8 @@ public class SummonerProfile extends Fragment  {
         Utilities.showLog("onCreate summ prof");
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getmRequestQueue();
-        if(getArguments()!=null)
-        summoner=getArguments().getParcelable(ARG_SUMMONER);
+        if (getArguments() != null)
+            summoner = getArguments().getParcelable(ARG_SUMMONER);
 
     }
 
@@ -79,20 +79,24 @@ public class SummonerProfile extends Fragment  {
 
         View view = inflater.inflate(R.layout.summoner_profile, container, false);
 
-        ranks=new TextView[3];
-        ranks[0]= (TextView) view.findViewById(R.id.rank_text_3v3);
-        ranks[1]= (TextView) view.findViewById(R.id.rank_text);
-        ranks[2]= (TextView) view.findViewById(R.id.rank_text_5v5_t);
-        lpTxts=new TextView[3];
-        lpTxts[0]= (TextView) view.findViewById(R.id.lp_3v3);
-        lpTxts[1]= (TextView) view.findViewById(R.id.lp_5v5);
-        lpTxts[2]= (TextView) view.findViewById(R.id.lp_5v5_t);
-        tierIcons=new ImageView[3];
-        tierIcons[0]= (ImageView) view.findViewById(R.id.img_3v3);
-        tierIcons[1]= (ImageView) view.findViewById(R.id.img_5v5);
-        tierIcons[2]= (ImageView) view.findViewById(R.id.img_5v5_t);
+        ranks = new TextView[]{
+                (TextView) view.findViewById(R.id.rank_text_3v3),
+                (TextView) view.findViewById(R.id.rank_text),
+                (TextView) view.findViewById(R.id.rank_text_5v5_t)};
+        lpTxts = new TextView[]{
+                (TextView) view.findViewById(R.id.lp_3v3),
+                (TextView) view.findViewById(R.id.lp_5v5),
+                (TextView) view.findViewById(R.id.lp_5v5_t)};
+        tierIcons = new ImageView[]{
+                (ImageView) view.findViewById(R.id.img_3v3),
+                (ImageView) view.findViewById(R.id.img_5v5),
+                (ImageView) view.findViewById(R.id.img_5v5_t)};
+        wlTexts = new TextView[]{
+                (TextView) view.findViewById(R.id.wins_loses_3v3),
+                (TextView) view.findViewById(R.id.wins_loses_5v5),
+                (TextView) view.findViewById(R.id.wins_loses_5v5_t)};
         profileIconImageView = (ImageView) view.findViewById(R.id.icon_container);
-        leagueLayout= (LinearLayout) view.findViewById(R.id.leaguesLayout);
+        leagueLayout = (LinearLayout) view.findViewById(R.id.leaguesLayout);
   /*      editText = (EditText) view.findViewById(R.id.text_field);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -159,21 +163,18 @@ public class SummonerProfile extends Fragment  {
     }
 
 
-
-
     public interface OnSummonerProfileInteractionListener {
         // TODO: Update argument type and nameTextView
-         void onSummonerFound(String name);
+        void onSummonerFound(String name);
     }
 
 
-
-    public void getSummonerProfile(){
-        int level=summoner.level;
-        int id=summoner.id;
-        final int iconId=summoner.iconId;
-        final String region=summoner.region;
-        final String name=summoner.name;
+    public void getSummonerProfile() {
+        int level = summoner.level;
+        int id = summoner.id;
+        final int iconId = summoner.iconId;
+        final String region = summoner.region;
+        final String name = summoner.name;
   /*      if (editText.getText().toString().length() > 2) {
             final View view = getActivity().getCurrentFocus();
             if (view != null) {
@@ -190,70 +191,74 @@ public class SummonerProfile extends Fragment  {
 
                    try {
                         JSONObject jsonObject = response.getJSONObject(summoner);
-              */        nameTextView.setText(name);
-                        levelTxt.setText("Level: " + level);
-               //         onIdReceived(id,region,version);
-                        regionTxt.setText(Utilities.getRegion(region));
-                        leagueLayout.setAlpha(1);
-        for(int i=0;i<3;i++){
+              */
+        nameTextView.setText(name);
+        levelTxt.setText("Level: " + level);
+        //         onIdReceived(id,region,version);
+        regionTxt.setText(Utilities.getRegion(region));
+        leagueLayout.setAlpha(1);
+        for (int i = 0; i < 3; i++) {
             tierIcons[i].setImageResource(R.drawable.provisional);
             ranks[i].setText("Unranked");
             lpTxts[i].setText("");
         }
-                        Utilities utilities=new Utilities() {
-                            @Override
-                            public void onResponseReceived(int arguments, String champName) {
+        Utilities utilities = new Utilities() {
+            @Override
+            public void onResponseReceived(int arguments, String champName) {
 
-                            }
+            }
 
-                            @Override
-                            public void onResponseReceived(int in,JSONArray array) {
-                                showLog("league received");
-                                int[] scores = {0, 0, 0};
-                                int[] bestIndexes = {-1, -1, -1};
-                                String[] queues = {"RANKED_TEAM_3x3", "RANKED_SOLO_5x5", "RANKED_TEAM_5x5"};
+            @Override
+            public void onResponseReceived(int in, JSONArray array) {
+                showLog("league received");
+                int[] scores = {0, 0, 0};
+                int[] bestIndexes = {-1, -1, -1};
+                String[] queues = {"RANKED_TEAM_3x3", "RANKED_SOLO_5x5", "RANKED_TEAM_5x5"};
 
-                                try {
-                                    for (int i = 0; i < array.length(); i++) {
+                try {
+                    for (int i = 0; i < array.length(); i++) {
 
-                                        JSONObject entry = array.getJSONObject(i);
-                                        int type = -1;
-                                        for (int j = 0; j < 3; j++){
-                                            if (entry.getString("queue").equals(queues[j]))
-                                                type = j;}
-                                          int score=Utilities.getRankScore(entry.getString("tier"),
-                                                  entry.getJSONArray("entries").getJSONObject(0).getString("division"));
-                                        if (score > scores[type]){
-                                            bestIndexes[type] = i;
-                                            scores[type]=score;
-                                        }
-
-
-                                    }
-                                    for (int i = 0; i < 3; i++) {
-
-                                        if(bestIndexes[i]>-1) {
-                                        String tier = array.getJSONObject(bestIndexes[i]).getString("tier"), division = array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0).getString("division");
-
-                                        showLog(tier+" "+division);
-
-                                        ranks[i].setText(tier + " " + division);
-                                        tierIcons[i].setImageResource(Utilities.getTierImage(tier, division));
-                                        lpTxts[i].setText(array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0).getInt("leaguePoints")
-                                                + " League Points\n"+array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0).getInt("wins")+" wins "
-                                                +array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0).getInt("losses")+" losses ");
-                                    }}
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                        JSONObject entry = array.getJSONObject(i);
+                        int type = -1;
+                        for (int j = 0; j < 3; j++) {
+                            if (entry.getString("queue").equals(queues[j]))
+                                type = j;
+                        }
+                        int score = Utilities.getRankScore(entry.getString("tier"),
+                                entry.getJSONArray("entries").getJSONObject(0).getString("division"));
+                        if (score > scores[type]) {
+                            bestIndexes[type] = i;
+                            scores[type] = score;
+                        }
 
 
-                        };
-                        int[] ids={id};
-                        utilities.getLeagueEntry(ids, region);
-                        LoadBitmapTask loadBitmapTask=new LoadBitmapTask(iconId,profileIconImageView,getActivity());
-                        loadBitmapTask.execute();
+                    }
+                    for (int i = 0; i < 3; i++) {
+
+                        if (bestIndexes[i] > -1) {
+                            String tier = array.getJSONObject(bestIndexes[i]).getString("tier"), division = array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0).getString("division");
+
+                            showLog(tier + " " + division);
+
+                            ranks[i].setText(tier + " " + division);
+                            tierIcons[i].setImageResource(Utilities.getTierImage(tier, division));
+                            JSONObject entry=array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0);
+                            lpTxts[i].setText(entry.getInt("leaguePoints")
+                                    + " League Points");
+                            wlTexts[i].setText(entry.getInt("wins")+" wins " + entry.getInt("losses")+" losses");
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        };
+        int[] ids = {id};
+        utilities.getLeagueEntry(ids, region);
+        LoadBitmapTask loadBitmapTask = new LoadBitmapTask(iconId, profileIconImageView, getActivity());
+        loadBitmapTask.execute();
 
 
                  /*   } catch (JSONException e) {
@@ -282,7 +287,6 @@ public class SummonerProfile extends Fragment  {
         super.onSaveInstanceState(outState);
 
     }
-
 
 
 }

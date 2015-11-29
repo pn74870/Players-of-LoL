@@ -44,6 +44,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.pn748_000.lolinfo.MainActivity" />
         </activity>
+        <activity android:name=".ActiveMatchActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.pn748_000.lolinfo.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

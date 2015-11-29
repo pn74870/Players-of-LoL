@@ -48,9 +48,8 @@ public class StatisticsFragment extends Fragment {
             turrets.setText(statsObject.optInt("totalTurretsKilled") + "");
             largestSpree.setText(statsObject.optInt("maxLargestKillingSpree")+"");
             killingSprees.setText(statsObject.optInt("killingSpree")+"");
-        }else {
-            table.setVisibility(View.GONE);
-            title.setText(getString(R.string.no_ranked_games));
+            table.setVisibility(View.VISIBLE);
+            title.setText(getString(R.string.ranked_stats));
         }
     }
     @Nullable
