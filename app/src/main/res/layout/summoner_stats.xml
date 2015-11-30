@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/stats_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No ranked games found"/>
+    <TableLayout
+        android:id="@+id/stats_table"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Penta kills:"/>
+            <TextView
+                android:id="@+id/penta_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+            <TextView
+                android:layout_weight="1"
+                android:text="Quadra kills:"/>
+            <TextView
+                android:id="@+id/quadra_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+            <TextView
+                android:layout_weight="1"
+                android:text="Triple kills:"/>
+            <TextView
+                android:id="@+id/triple_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Double kills:"/>
+            <TextView
+                android:id="@+id/double_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Kills:"/>
+            <TextView
+                android:id="@+id/kills_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Most kills:"/>
+            <TextView
+                android:id="@+id/most_kills_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Assists:"/>
+            <TextView
+                android:id="@+id/assists_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Gold Earned:"/>
+            <TextView
+                android:id="@+id/gold_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Turrets Destroyed:"/>
+            <TextView
+                android:id="@+id/turrets_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Killing Sprees:"/>
+            <TextView
+                android:id="@+id/killing_sprees_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="@dimen/statistics_row_padding"
+            android:layout_marginBottom="@dimen/statistics_row_padding">
+
+            <TextView
+                android:layout_weight="1"
+                android:text="Largest Killing Spree:"/>
+            <TextView
+                android:id="@+id/largest_killing_spree_number"
+                android:layout_weight="1"
+                android:text="99"/>
+        </TableRow>
+
+
+    </TableLayout>
+
+</LinearLayout>
