@@ -39,7 +39,11 @@ public interface Keys {
     String PROFILE_ICON_ID="profileIconId";
     String LEVEL="summonerLevel";
     String NAME="name";
+    String URL_RUNE="/v1.2/rune/";
+
     String ARG_SUMMONER_OBJECT="summonerObject";
+    String ARG_REGION="regionArgument";
+    String ARG_PARTICIPANTS="participantsArgumen";
 
 
 }

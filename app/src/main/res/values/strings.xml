@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">LoL Info</string>
+
+
+    <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_item_1">Summoner Info</string>
+    <string name="navigation_item_2">Free Champion Rotation</string>
+    <string name="navigation_item_3">Active Game</string>
+    <string name="euw">Europe West</string>
+    <string name="na">North America</string>
+    <string name="eune">Europe Nordic and East</string>
+    <string name="lan">Latin America North</string>
+    <string name="las">Latin America South</string>
+    <string name="oce">Oceania</string>
+    <string name="ru">Russia</string>
+    <string name="tr">Turkey</string>
+    <string name="champIdPreferences">champ ids</string>
+    <string name="search_title">Summoner\'s name</string>
+    <string name="search_hint">Summoner</string>
+    <string name="summoner_activity">Summoner</string>
+    <string name="ranked_stats">Ranked statistics</string>
+    <string name="no_ranked_games">No ranked games found</string>
+
+
+</resources>

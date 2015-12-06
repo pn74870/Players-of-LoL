@@ -5,7 +5,6 @@
             <stroke android:width="@dimen/active_match_border_width"
                 android:color="@color/blueTeamColor"/>
 
-
         </shape>
     </item>
 

@@ -255,6 +255,7 @@ public static void startSummonerActivity(Summoner summoner,Context context) {
         showLog("getting champ "+champId);
 
          if(champName.equals("")) {
+             showLog("getting champ from "+getChampNameRequestUrl(champId,region));
              JsonObjectRequest champRequest=new JsonObjectRequest(Request.Method.GET, getChampNameRequestUrl(champId, region), (String) null, new Response.Listener<JSONObject>() {
                  @Override
                  public void onResponse(JSONObject response) {

@@ -1,9 +1,6 @@
 package com.example.pn748_000.lolinfo;
 
 
-import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -14,46 +11,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
+import com.bignerdranch.expandablerecyclerview.Model.ParentListItem;
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ChildViewHolder;
+import com.bignerdranch.expandablerecyclerview.ViewHolder.ParentViewHolder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.example.pn748_000.lolinfo.Keys.API_KEY;
-import static com.example.pn748_000.lolinfo.Keys.ARG_SUMMONER_OBJECT;
-import static com.example.pn748_000.lolinfo.Keys.DDRAGON;
-import static com.example.pn748_000.lolinfo.Keys.HTTP;
-import static com.example.pn748_000.lolinfo.Keys.ID;
-import static com.example.pn748_000.lolinfo.Keys.PNG;
 import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON_ID;
-import static com.example.pn748_000.lolinfo.Keys.URL_ACTIVE_MATCH;
-import static com.example.pn748_000.lolinfo.Keys.URL_CHAMP_ICON;
-import static com.example.pn748_000.lolinfo.Keys.URL_ITEMS;
-import static com.example.pn748_000.lolinfo.Utilities.createSummonerObject;
-import static com.example.pn748_000.lolinfo.Utilities.getIntFromJson;
 import static com.example.pn748_000.lolinfo.Utilities.getJsonArrayFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getJsonObjectFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getLeagueRequestUrl;
 
-import static com.example.pn748_000.lolinfo.Utilities.getSummonerUrl;
-import static com.example.pn748_000.lolinfo.Utilities.requestJsonObject;
 import static com.example.pn748_000.lolinfo.Utilities.showLog;
-import static com.example.pn748_000.lolinfo.Utilities.startSummonerActivity;
-import static com.example.pn748_000.lolinfo.Utilities.stat;
 
 
 /**
@@ -70,7 +50,6 @@ public class ActiveMatchFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String region, platformID;
-
     TextView type;
     LinearLayout parentLayout;
     Utilities utilities;
@@ -79,7 +58,7 @@ public class ActiveMatchFragment extends Fragment {
     int[] ids;
     ActiveMatchAdapter adapter;
     JSONObject activeMatchJson;
-
+    private ArrayList<Integer> idsList=new ArrayList<>();
     // TODO: Rename and change types and number of parameters
     public static ActiveMatchFragment newInstance(String region, String participants) {
         ActiveMatchFragment fragment = new ActiveMatchFragment();
@@ -94,6 +73,7 @@ public class ActiveMatchFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,16 +87,18 @@ public class ActiveMatchFragment extends Fragment {
             }
         }
         playersList = new ArrayList<>();
+
         utilities = new Utilities() {
             @Override
             public void onResponseReceived(int index, String champName) {
+                showLog("response received 1");
                 champNameReceived(champName, index);
 
             }
 
             @Override
             public void onResponseReceived(int index, JSONArray array) {
-
+                showLog("response received 2");
                 try {
                     onArrayReceived(array, index);
                 } catch (JSONException e) {
@@ -132,11 +114,9 @@ public class ActiveMatchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_active_match, container, false);
         type = (TextView) view.findViewById(R.id.matchType);
+        idsList.add(1);
         parentLayout = (LinearLayout) view.findViewById(R.id.parentLayout);
         recyclerView = (RecyclerView) view.findViewById(R.id.activeMatchRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ActiveMatchAdapter(getActivity());
-        recyclerView.setAdapter(adapter);
 
         return view;
     }
@@ -145,11 +125,9 @@ public class ActiveMatchFragment extends Fragment {
 
         showLog("getActiveMatch was called");
         this.region = region;
-        if (playersList != null) playersList.clear(); //TODO notify adapter
-        adapter.notifyDataSetChanged();
         JSONArray participants = getJsonArrayFromJson(activeMatchObject, "participants");
         if (participants != null) {
-            for (int i = 0; i < participants.length(); i++) playersList.add(null);
+
             Log.e("asd", "participants: " + participants.length());
             type.setTextSize(20);
             type.setText(Utilities.matchType("", "", "", Utilities.stat(activeMatchObject, "gameQueueConfigId")));
@@ -157,7 +135,7 @@ public class ActiveMatchFragment extends Fragment {
             ids = new int[participants.length()];
 
             for (int i = 0; i < participants.length(); i++) {
-
+                showLog("participants loop "+i);
                 try {
 
 
@@ -171,6 +149,7 @@ public class ActiveMatchFragment extends Fragment {
                     playerObj.blueTeam = player.getInt("teamId") == 100;
                     playerObj.profileId = player.getInt(PROFILE_ICON_ID);
                     playerObj.id = ids[i];
+                //  idsList.add(new Integer(ids[i]));
        /*                         requestJsonObject(getStatsUrl(ids[i], region), new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
@@ -202,7 +181,7 @@ public class ActiveMatchFragment extends Fragment {
                                     }
                                 });
 */
-                    playersList.set(i, playerObj);
+                    playersList.add(playerObj);
                     utilities.champNameFromId(i, MyApplication.getAppContext(), champID, region);
 
                     //TODO runes and masteries
@@ -218,12 +197,14 @@ public class ActiveMatchFragment extends Fragment {
     }
 
     void champNameReceived(final String name, final int index) {
+        showLog("champ name received");
         playersList.get(index).champ = name;
         if (index == ids.length - 1) utilities.getLeagueEntry(ids, region);
 
     }
 
     void onArrayReceived(JSONArray jsonArray, int in) throws JSONException {
+        showLog("array received");
         if (jsonArray != null) {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject entry = jsonArray.getJSONObject(i);
@@ -243,43 +224,89 @@ public class ActiveMatchFragment extends Fragment {
             }
         }
         showLog("the length of the list " + playersList.size());
-        boolean noNulls = true;
-        for (Player player : playersList)
-            if (player == null) noNulls = false;
-        if (noNulls) adapter.setData(playersList);
+
+        if (in+1==playersList.size()) {
+            showLog("notifying adapter " + playersList.size());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            adapter = new ActiveMatchAdapter(playersList);
+            recyclerView.setAdapter(adapter);
+
+
+
+            //  adapter.setData(playersList);
+        }
 
 
     }
 
-    class Player {
+    class Player implements ParentListItem{
         String name, champ, tier, division;
         boolean blueTeam, unranked = true;
         int wins, loses, numbPlayed, lp, profileId, id;
         double k, d, a;
 
-    }
+        @Override
+        public List<Integer> getChildItemList() {
+            return idsList;
+        }
 
-    class ActiveMatchAdapter extends RecyclerView.Adapter<ActiveMatchAdapter.ActiveMatchViewHolder> {
+        @Override
+        public boolean isInitiallyExpanded() {
+            return false;
+        }
+
+
+    }
+  private class ActiveMatchAdapter extends ExpandableRecyclerAdapter<ActiveMatchAdapter.ActiveMatchViewHolderP,ActiveMatchAdapter.ActiveMatchViewHolderC>{ // extends RecyclerView.Adapter<ActiveMatchAdapter.ActiveMatchViewHolderP> {
 
         ArrayList<Player> data = new ArrayList<>();
         private final LayoutInflater inflater;
         private final ImageLoader imageLoader;
 
-        public ActiveMatchAdapter(Context context) {
+     /*   public ActiveMatchAdapter(Context context) {
             inflater = LayoutInflater.from(context);
             VolleySingleton volleySingleton = VolleySingleton.getInstance();
             imageLoader = volleySingleton.getImageLoader();
         }
 
-        @Override
-        public ActiveMatchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+      /**
+       * Primary constructor. Sets up {@link #mParentItemList} and {@link #mItemList}.
+       * <p/>
+       * Changes to {@link #mParentItemList} should be made through add/remove methods in
+       * {@link ExpandableRecyclerAdapter}
+       *
+       * @param parentItemList List of all {@link ParentListItem} objects to be
+       *                       displayed in the RecyclerView that this
+       *                       adapter is linked to
+       */
+      public ActiveMatchAdapter(List<? extends ParentListItem> parentItemList) {
+          super(parentItemList);
+          inflater = LayoutInflater.from(getActivity());
+          VolleySingleton volleySingleton = VolleySingleton.getInstance();
+          imageLoader = volleySingleton.getImageLoader();
+      }
 
-            return new ActiveMatchViewHolder(inflater.inflate(R.layout.player_row, parent, false));
-        }
 
-        @Override
-        public void onBindViewHolder(final ActiveMatchViewHolder holder, int position) {
-            Player player = data.get(position);
+
+      @Override
+      public ActiveMatchViewHolderP onCreateParentViewHolder(ViewGroup parent) {
+          return new ActiveMatchViewHolderP(inflater.inflate(R.layout.player_row_purple, parent, false));
+      }
+
+      @Override
+      public ActiveMatchViewHolderC onCreateChildViewHolder(ViewGroup childViewGroup) {
+          return new ActiveMatchViewHolderC(inflater.inflate(R.layout.player_second_row, childViewGroup, false));
+      }
+
+      @Override
+      public void onBindChildViewHolder(ActiveMatchViewHolderC childViewHolder, int position, Object childListItem) {
+
+      }
+
+      @Override
+      public void onBindParentViewHolder(final ActiveMatchViewHolderP holder, int position, ParentListItem parentListItem) {
+
+          Player player= (Player) parentListItem;
             if (player != null) {
                 holder.iconId = player.profileId;
                 holder.champName.setText(player.champ);
@@ -292,7 +319,6 @@ public class ActiveMatchFragment extends Fragment {
                     holder.lp.setVisibility(View.GONE);}
                 else {
                     holder.unranked = false;
-
 
 
                     holder.lp.setText(player.lp + "LP");
@@ -321,21 +347,28 @@ public class ActiveMatchFragment extends Fragment {
             } else showLog("player is null @ position " + position);
         }
 
-        @Override
+      /*  @Override
         public int getItemCount() {
-            return data.size();
+            showLog("getting item count");
+            return playersList.size();
+        }*/
+        public void setData(ArrayList<Player> players) {
+            showLog("setting data");
+            data = players;
+            notifyItemRangeChanged(0, players.size());
+            notifyDataSetChanged();
         }
-
-        class ActiveMatchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+       class ActiveMatchViewHolderP extends ParentViewHolder{ //RecyclerView.ViewHolder implements View.OnClickListener {
             TextView name, champName, numberPlayed, winsLoses, kda, rank, lp;
             ImageView champIcon, tierIcon;
-            FrameLayout background;
+            RelativeLayout background;
             boolean unranked = true;
             int id, iconId;
 
-            public ActiveMatchViewHolder(View v) {
+            public ActiveMatchViewHolderP(View v) {
                 super(v);
-                background = (FrameLayout) v.findViewById(R.id.playerParentLayout);
+                showLog("parent constructor was called");
+                background = (RelativeLayout) v.findViewById(R.id.playerParentLayout);
                 name = (TextView) v.findViewById(R.id.summonerName);
                 champName = (TextView) v.findViewById(R.id.champName);
                 numberPlayed = (TextView) v.findViewById(R.id.numberPlayed);
@@ -345,11 +378,11 @@ public class ActiveMatchFragment extends Fragment {
                 lp = (TextView) v.findViewById(R.id.lp);
                 champIcon = (ImageView) v.findViewById(R.id.champIcon);
                 tierIcon = (ImageView) v.findViewById(R.id.tierIcon);
-                v.setOnClickListener(this);
+               // v.setOnClickListener(this);
 
             }
 
-            @Override
+         /*   @Override
             public void onClick(View view) {
                 final String nameTxt = name.getText().toString();
                 if (unranked) {
@@ -368,15 +401,19 @@ public class ActiveMatchFragment extends Fragment {
                 } else
                     startSummonerActivity(new Summoner(nameTxt, id, iconId, 30, region), getActivity());
 
-            }
+            }*/
         }
 
-        public void setData(ArrayList<Player> players) {
-            showLog("setting data");
-            data = players;
-            notifyItemRangeChanged(0, players.size());
-            notifyDataSetChanged();
-        }
+     class ActiveMatchViewHolderC extends ChildViewHolder{
+        int id;
+         TextView idTest;
+         public ActiveMatchViewHolderC(View itemView) {
+             super(itemView);
+             showLog("child constructor was called");
+           //  idTest= (TextView) itemView.findViewById(R.id.id_test);
+         }
+     }
+
     }
 
 

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent">
+<android.support.v7.widget.Toolbar
+android:id="@+id/app_bar"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:minHeight="?attr/actionBarSize"
+android:background="?attr/colorPrimary"
+android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:elevation="8dp"
+    />
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/scrollView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+
+
+            android:padding="10dp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+           android:text="Game started: "
+
+            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gameStart"/>
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/darkGrey">
+
+            <TextView
+
+                android:layout_gravity="start"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="@color/whiteColor"
+
+                android:text="Blue Team"
+
+                />
+            <ImageView
+
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+
+                android:id="@+id/bannedChamp3"/>
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/bannedChamp2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/bannedChamp3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+               />
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/bannedChamp1"
+                android:layout_toLeftOf="@id/bannedChamp2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+               />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/blueContainer"
+            android:orientation="vertical"/>
+        <RelativeLayout
+            android:background="@color/darkGrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:layout_gravity="start"
+                android:padding="10dp"
+                android:textColor="@color/whiteColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:text="Purple Team"
+
+                />
+            <ImageView
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/bannedChamp6"/>
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/bannedChamp5"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/bannedChamp6"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                />
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/bannedChamp4"
+                android:layout_toLeftOf="@id/bannedChamp5"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+              />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/purpleContainer"
+            android:orientation="vertical"/>
+
+    </LinearLayout>
+
+
+</ScrollView>
+</LinearLayout>

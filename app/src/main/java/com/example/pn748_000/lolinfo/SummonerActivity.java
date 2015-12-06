@@ -72,14 +72,14 @@ public class SummonerActivity extends AppCompatActivity implements MatchHistory.
 
         return true;
     }
-/*
+*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home) NavUtils.navigateUpFromSameTask(this);
+        if (item.getItemId()==android.R.id.home) finish();
 
-        if(item.getItemId()==R.id.favourite_button) dbAdapter;
+     //   if(item.getItemId()==R.id.favourite_button) dbAdapter;
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

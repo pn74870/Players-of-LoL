@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColorDark">#455A64</color>
+    <color name="primaryColor">#607D8B</color>
+    <color name="accentColor">#F44336</color>
+    <color name="whiteColor">#FFFFFF</color>
+    <color name="colorHighlight">#B6B6B6</color>
+    <color name="greenColor">#c5e1a5</color>
+    <color name="redColor">#ffab91</color>
+    <color name="indigo100">#C5CAE9</color>
+    <color name="blueGrey100">#CFD8DC</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#01DF01</color>
+    <color name="blueTeamColor">#49C4F7</color>
+    <color name="purpleTeamColor">#996DCA</color>
+    <color name="darkGrey">#212121</color>
+</resources>

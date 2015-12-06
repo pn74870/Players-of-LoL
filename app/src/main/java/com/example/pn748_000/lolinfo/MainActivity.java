@@ -55,6 +55,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static com.example.pn748_000.lolinfo.Keys.API_KEY;
+import static com.example.pn748_000.lolinfo.Keys.ARG_PARTICIPANTS;
+import static com.example.pn748_000.lolinfo.Keys.ARG_REGION;
 import static com.example.pn748_000.lolinfo.Keys.ARG_SUMMONER_OBJECT;
 import static com.example.pn748_000.lolinfo.Keys.HTTP;
 import static com.example.pn748_000.lolinfo.Keys.ID;
@@ -218,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 invalidateOptionsMenu();
                 if (profileMode)
                     startSummonerActivity(Utilities.createSummonerObject(summonerJsonObject, region),MainActivity.this);
-                else getActiveMattch(getIntFromJson(summonerJsonObject,ID),region);
+                else getActiveMatch(getIntFromJson(summonerJsonObject, ID), region);
                 editText.setText(quer);
             }
         }, new Response.ErrorListener() {
@@ -227,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 error.printStackTrace();
                 if (error instanceof NetworkError)
                     showToast("No internet connection", getApplicationContext());
-                else if (error.networkResponse.statusCode == 404)
+                else if (error.networkResponse!=null&&error.networkResponse.statusCode == 404)
                     showToast("Summoner was not found", getApplicationContext());
 
             }
@@ -375,32 +377,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.navigation_item_3:
                 toolbar.setTitle(R.string.navigation_item_3);
-                if (summonerJsonObject != null) {
-                  startActivity(new Intent(this,ActiveMatchActivity.class));
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new TestFragment()).commit();
+               /* if (summonerJsonObject != null) {
+
+                startActivity(new Intent(this,ActiveMatchActivity.class));
                 } else {
                     Toast.makeText(this, "Enter the summoner name", Toast.LENGTH_SHORT).show();
                     mDrawerLayout.closeDrawers();
                     //    searchView.setIconified(false);
-                }
+                }*/
                 break;
 
 
         }
     }
 
-    private void getActiveMattch(int id, final String region) {
+    private void getActiveMatch(int id, final String region) {
 
         requestJsonObject(HTTP + region + URL_ACTIVE_MATCH + getPlatformID(region) + id + API_KEY, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+/*
                     if (activeMatchFragment == null)
                         activeMatchFragment = ActiveMatchFragment.newInstance(region,response.toString());
                     FragmentManager manager = getSupportFragmentManager();
                     manager.beginTransaction().replace(R.id.fragment_container, activeMatchFragment).commit();
                     manager.executePendingTransactions();
                     if (activeMatchFragment.activeMatchJson != response && Utilities.getIntFromJson(summonerJsonObject, "id") > 0)
-                        activeMatchFragment.getActiveMatch(response,region);
+                        activeMatchFragment.getActiveMatch(response,region);*/
+                    Intent intent=new Intent(MainActivity.this,ActiveMatchActivity.class);
+                    intent.putExtra(ARG_REGION,region).putExtra(ARG_PARTICIPANTS,response.toString());
+                    startActivity(intent);
 
             }
         }, new Response.ErrorListener() {

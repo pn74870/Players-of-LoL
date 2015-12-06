@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    android:id="@+id/buttonsPanel"
+    >
+
+    <Button
+        android:id="@+id/runesBtn"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Runes"
+        android:textSize="11sp" />
+
+    <Button
+        android:id="@+id/masteriesBtn"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Masteries"
+        android:textSize="11sp" />
+
+    <Button
+        android:id="@+id/profileBtn"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Profile"
+        android:textSize="11sp" />
+
+</LinearLayout>

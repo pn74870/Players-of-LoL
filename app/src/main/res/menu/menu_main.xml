@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+<!--    <item android:id="@+id/search"
+        android:title="@string/search_title"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:orderInCategory="100"
+
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView" />-->
+    <item android:id="@+id/match_or_profile_button"
+        android:title="Profile"
+        app:showAsAction="ifRoom|withText"/>
+
+    <item android:id="@+id/region_button"
+        android:title="region"
+        app:showAsAction="ifRoom|withText"/>
+
+
+</menu>

@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="3dp"
-    android:id="@+id/playerParentLayout"
-    android:background="@drawable/active_match_purple"
-    android:clickable="true">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/playerLinearLayout">
+<android.support.v7.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+
+
+
+    app:cardUseCompatPadding="true"
+    >
 
     <RelativeLayout
+        android:clickable="true"
         android:orientation="horizontal" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="2dp"
-
-        android:background="@drawable/ripple"
+        android:id="@+id/playerParentLayout"
+        android:background="@drawable/purple_ripple"
         android:layout_gravity="center_horizontal|bottom">
 
             <ImageView
@@ -128,4 +137,8 @@
 
 
     </RelativeLayout>
-</FrameLayout>
+    </android.support.v7.widget.CardView>
+    <include layout="@layout/player_second_row"
+        android:id="@+id/buttons"/>
+
+</LinearLayout>

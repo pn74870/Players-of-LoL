@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/euw_item"
+          android:title="@string/euw"
+       />
+    <item android:id="@+id/na_item"
+        android:title="@string/na"
+
+        />
+    <item android:id="@+id/eune_item"
+        android:title="@string/eune"
+        />
+    <item android:id="@+id/lan_item"
+        android:title="@string/lan"
+        />
+    <item android:id="@+id/las_item"
+        android:title="@string/las"
+        />
+    <item android:id="@+id/oce_item"
+        android:title="@string/oce"
+        />
+    <item android:id="@+id/ru_item"
+        android:title="@string/ru"
+        />
+        <item android:id="@+id/tr_item"
+            android:title="@string/tr"
+            />
+
+</menu>
