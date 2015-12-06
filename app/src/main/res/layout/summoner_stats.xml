@@ -8,7 +8,9 @@
         android:id="@+id/stats_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No ranked games found"/>
+        android:text="@string/no_ranked_games"
+        android:textSize="@dimen/no_ranked_games_txt_size"
+        android:textStyle="bold"/>
     <TableLayout
         android:id="@+id/stats_table"
         android:layout_marginTop="10dp"

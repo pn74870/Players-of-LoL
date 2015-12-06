@@ -1,6 +1,7 @@
 package com.example.pn748_000.lolinfo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,10 +23,14 @@ import org.json.JSONObject;
 
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Formatter;
 import java.util.Locale;
 
 import static com.example.pn748_000.lolinfo.Utilities.calculateAverage;
+import static com.example.pn748_000.lolinfo.Utilities.formatDouble;
 import static com.example.pn748_000.lolinfo.Utilities.formatStringOneAfterDec;
 import static com.example.pn748_000.lolinfo.Utilities.getChampImg;
 import static com.example.pn748_000.lolinfo.Utilities.getChampNameRequestUrl;
@@ -66,7 +71,7 @@ interface StatsListener{
     public ChampionsFragment(){}
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             listener= (StatsListener) activity;}
@@ -102,6 +107,11 @@ interface StatsListener{
         adapter=new ChampionListAdapter();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener=null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -153,7 +163,7 @@ interface StatsListener{
         });
 
     }
-    class ChampionStats{
+    class ChampionStats implements Comparable<ChampionStats>{
         int kills,deaths,assists,cs,loses,wins,games;
         String champ;
         ChampionStats(int kills,int deaths,int assists,int cs,int loses,int wins){
@@ -165,7 +175,13 @@ interface StatsListener{
             this.loses=loses;
             this.wins=wins;
             games=wins+loses;
-        }}
+        }
+
+        @Override
+        public int compareTo(ChampionStats championStats) {
+            return championStats.games-games;
+        }
+    }
         class ChampionListViewHolder extends RecyclerView.ViewHolder{
             ImageView champIcon;
             TextView kda,winsLoses,ratio,creeps;
@@ -182,6 +198,12 @@ interface StatsListener{
             ArrayList<ChampionStats> list=new ArrayList<>();
             public void setData(ArrayList<ChampionStats> list){
                 this.list=list;
+                Collections.sort(this.list, new Comparator<ChampionStats>() {
+                    @Override
+                    public int compare(ChampionStats championStats, ChampionStats t1) {
+                        return championStats.compareTo(t1);
+                    }
+                });
                 notifyDataSetChanged();
             }
             @Override
@@ -192,7 +214,7 @@ interface StatsListener{
             @Override
             public void onBindViewHolder(final ChampionListViewHolder holder, int position) {
                 ChampionStats stats=list.get(position);
-                holder.creeps.setText(formatStringOneAfterDec(calculateAverage(stats.cs, stats.games)));
+                holder.creeps.setText(formatDouble(calculateAverage(stats.cs, stats.games),0));
                 holder.ratio.setText(formatStringOneAfterDec(calculateAverage(stats.wins*100,stats.games))+"%");
                 holder.winsLoses.setText(Html.fromHtml("<font color=#01DF01>"+stats.wins+"</font> <font color=#000000>"+"/"+"</font> <font color=#FF0000>"+stats.loses+"</font>"));
                 holder.kda.setText(formatStringOneAfterDec(calculateAverage(stats.kills, stats.games)) + "/"

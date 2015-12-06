@@ -83,6 +83,9 @@ public abstract class Utilities {
     public static String formatStringOneAfterDec( double number){
         return String.format(Locale.US,"%.1f",number);
     }
+    public static String formatDouble(double number,int prec){
+        return String.format(Locale.US,"%."+prec+"f",number);
+    }
     public static String getRegion(String reg) {
         switch (reg) {
             case "euw":

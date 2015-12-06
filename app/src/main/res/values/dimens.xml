@@ -7,4 +7,5 @@
     <dimen name="statistics_row_padding">3dp</dimen>
     <dimen name="active_match_text_size">12sp</dimen>
     <dimen name="active_match_border_width">2dp</dimen>
+    <dimen name="no_ranked_games_txt_size">15sp</dimen>
 </resources>

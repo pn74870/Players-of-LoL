@@ -26,6 +26,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.LruCache;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -78,7 +79,7 @@ import static com.example.pn748_000.lolinfo.Utilities.showToast;
 import static com.example.pn748_000.lolinfo.Utilities.startSummonerActivity;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener, FreeChampFragment.FreeChampClickListener {
    private final static String ID_STATE = "id";
    private final static String REGION_STATE = "regionState";
    private final static String MODE_STATE="modeState";
@@ -361,23 +362,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (mSelectedId) {
             case R.id.navigation_item_1:
-                toolbar.setTitle(R.string.navigation_item_1);
+                toolbar.setTitle(R.string.app_name);
                 if (freeChampFragment != null)
                     getSupportFragmentManager().beginTransaction().remove(freeChampFragment).commit();
-                if (activeMatchFragment != null)
-                    getSupportFragmentManager().beginTransaction().remove(activeMatchFragment).commit();
+                profileMode=true;
+                invalidateOptionsMenu();
 
                 break;
             case R.id.navigation_item_2:
                 toolbar.setTitle(R.string.navigation_item_2);
                 if (freeChampFragment == null)
-                    freeChampFragment = FreeChampFragment.newInstance("", "");
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, freeChampFragment).commit();
+                    freeChampFragment = FreeChampFragment.newInstance(region);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fab_in,R.anim.fab_out)
+                        .replace(R.id.fragment_container, freeChampFragment).commit();
+
 
                 break;
             case R.id.navigation_item_3:
-                toolbar.setTitle(R.string.navigation_item_3);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new TestFragment()).commit();
+                toolbar.setTitle(R.string.app_name);
+                if (freeChampFragment != null)
+                    getSupportFragmentManager().beginTransaction().remove(freeChampFragment).commit();
+                profileMode=false;
+                invalidateOptionsMenu();
                /* if (summonerJsonObject != null) {
 
                 startActivity(new Intent(this,ActiveMatchActivity.class));
@@ -390,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         }
+        mDrawerLayout.closeDrawers();
     }
 
     private void getActiveMatch(int id, final String region) {
@@ -510,6 +517,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStop();
         PreferenceManager.getDefaultSharedPreferences(this).edit().putString(REGION_STATE, region).putBoolean(MODE_STATE,profileMode).apply();
 
+    }
+
+    @Override
+    public void onFreeChampClicked() {
+        if (freeChampFragment != null)
+            getSupportFragmentManager().beginTransaction().remove(freeChampFragment).commit();
+        setTitle(R.string.app_name);
     }
 
     class SummonerListAdapter extends RecyclerView.Adapter<SummonerListAdapter.SummonerListViewHolder> {

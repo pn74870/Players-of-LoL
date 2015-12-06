@@ -1,19 +1,25 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.pn748_000.lolinfo.FreeChampFragment"
-    android:padding="10dp"
-    android:orientation="vertical"
-    android:clickable="true"
-    android:background="@color/whiteColor">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Free Champions"
-        android:layout_margin="5dp"/>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:clickable="true">
+<LinearLayout
+    android:layout_height="match_parent"
+
+
+    android:background="@color/darkGrey"
+
+    android:layout_width="match_parent"
+    android:alpha=".8"
+    />
+
 
     <GridLayout
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:columnCount="5"
@@ -66,5 +72,17 @@
             android:layout_height="112dp"
             android:id="@+id/champ10"/>
     </GridLayout>
+</FrameLayout>
+<!--<TextView
+    android:layout_margin="5dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textStyle="bold"
+    android:textSize="15sp"
+    android:text="This week's free champions:"/>
+    <TextView
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/champsTxt"/-->
 
-</LinearLayout>

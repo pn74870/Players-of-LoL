@@ -28,7 +28,7 @@ public class SummonerActivity extends AppCompatActivity implements MatchHistory.
     final static String SUMMONER_PROFILE_STATE = "summoner profile";
     final static String SUMMONER_OBJECT_STATE = "summObject";
     final static String CHAMPIONS_FRAGMENT_STATE="champsFragment";
-    private String[] tabNames = {"Profile", "History", "Champions", "Ranked Stats"};
+    private String[] tabNames = { "History","Profile", "Champions", "Ranked Stats"};
     private MatchHistory matchHistory;
     private SummonerProfile summonerProfile;
     private DBAdapter dbAdapter;
@@ -60,6 +60,7 @@ public class SummonerActivity extends AppCompatActivity implements MatchHistory.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setOffscreenPageLimit(3);
+        viewPager.setCurrentItem(1);
         dbAdapter=new DBAdapter(this);
         getSupportActionBar().setTitle(summoner.name);
 
@@ -132,11 +133,11 @@ public class SummonerActivity extends AppCompatActivity implements MatchHistory.
         public Fragment getItem(int position) {
 
             switch (position) {
-                case 0:
+                case 1:
                     if (summonerProfile == null) summonerProfile = SummonerProfile.newInstance(summoner);
                     return summonerProfile;
 
-                case 1:
+                case 0:
                     if (matchHistory == null) matchHistory = MatchHistory.newInstance(summoner.id,summoner.region);
                     return matchHistory;
                 case 2:

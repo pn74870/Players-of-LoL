@@ -9,6 +9,7 @@
         android:icon="@drawable/ic_autorenew_black_24dp"
         android:title="@string/navigation_item_2"/>
     <item
+        android:icon="@drawable/ic_watch_later_black_24dp"
         android:id="@+id/navigation_item_3"
         android:title="@string/navigation_item_3"/>
 

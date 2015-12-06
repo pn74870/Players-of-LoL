@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true">
+<RelativeLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
+    android:padding="5dp"
 
 
    >
@@ -16,6 +22,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginEnd="5dp"/>
     <TextView
+        android:textColor="@color/darkGrey"
         android:layout_marginTop="4dp"
         android:layout_marginLeft="6dp"
         android:layout_width="wrap_content"
@@ -24,6 +31,7 @@
         android:layout_toRightOf="@id/championIcon"
         android:id="@+id/wl_txt"/>
     <TextView
+        android:textColor="@color/darkGrey"
         android:layout_alignTop="@id/wl_txt"
         android:id="@+id/wl_number"
         android:layout_marginLeft="2dp"
@@ -34,6 +42,7 @@
        />
 
   <TextView
+      android:textColor="@color/darkGrey"
       android:id="@+id/ratio_txt"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -41,6 +50,7 @@
       android:layout_alignLeft="@+id/wl_txt"
       android:text="Ratio:"/>
     <TextView
+        android:textColor="@color/darkGrey"
         android:id="@+id/ratio_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,8 +58,8 @@
         android:layout_alignBottom="@id/ratio_txt"
         android:text="100%"/>
     <TextView
-
-        android:layout_width="50dp"
+        android:textColor="@color/darkGrey"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:text="300"
         android:id="@+id/cs_number"
@@ -70,6 +80,7 @@
 
 
     <TextView
+        android:textColor="@color/darkGrey"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/kda_number"
@@ -87,3 +98,4 @@
         android:layout_marginRight="5dp"/>
 
 </RelativeLayout>
+</android.support.v7.widget.CardView>

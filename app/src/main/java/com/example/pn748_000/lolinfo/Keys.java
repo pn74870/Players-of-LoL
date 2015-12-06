@@ -40,7 +40,8 @@ public interface Keys {
     String LEVEL="summonerLevel";
     String NAME="name";
     String URL_RUNE="/v1.2/rune/";
-
+    String URL_MASTERY="/v1.2/mastery/";
+    String MASTERY_TREE="?masteryData=masteryTree";
     String ARG_SUMMONER_OBJECT="summonerObject";
     String ARG_REGION="regionArgument";
     String ARG_PARTICIPANTS="participantsArgumen";
