@@ -14,7 +14,7 @@
     android:background="@color/darkGrey"
 
     android:layout_width="match_parent"
-    android:alpha=".8"
+    android:alpha=".9"
     />
 
 

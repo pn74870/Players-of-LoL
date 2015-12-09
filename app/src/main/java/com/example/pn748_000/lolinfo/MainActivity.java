@@ -83,20 +83,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    private final static String ID_STATE = "id";
    private final static String REGION_STATE = "regionState";
    private final static String MODE_STATE="modeState";
-
-    Toolbar toolbar;
-    NavigationView navigationView;
-    DrawerLayout mDrawerLayout;
-    ActionBarDrawerToggle mDrawerToggle;
-    int mSelectedId;
+    private final static String FREE_CHAMP_STATE="freeChampFragState";
+    private Toolbar toolbar;
+    private  NavigationView navigationView;
+    private  DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private int mSelectedId;
 
     private String region;
     private String summonerName;
 
     public static String version;
    private FreeChampFragment freeChampFragment;
-    boolean typingName;
-   private ActiveMatchFragment activeMatchFragment;
+   private boolean typingName;
     protected static JSONObject summonerJsonObject;
     //   SearchView searchView;
     private String quer = "";
@@ -108,9 +107,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private EditText editText;
     private SummonerListAdapter adapter;
     private boolean profileMode;
+    protected static int screenDensity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        showLog("creating main activity");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -196,12 +196,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         };
-
+        screenDensity=getResources().getDisplayMetrics().densityDpi;
 
     }
 
     public void searchSummoner(final String query, final String region) {
-
+        if(version!=null){
         summonerName = query.replace(" ", "").toLowerCase();
         showLog("submitted region " + region);
         Utilities.requestJsonObject(Utilities.getSummonerUrl(region, StringEscapeUtils.escapeHtml4(summonerName)), new Response.Listener<JSONObject>() {
@@ -232,9 +232,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     showToast("No internet connection", getApplicationContext());
                 else if (error.networkResponse!=null&&error.networkResponse.statusCode == 404)
                     showToast("Summoner was not found", getApplicationContext());
+                else if(error.networkResponse!=null&&error.networkResponse.statusCode==429)
+                    showToast("Rate limit exceeded. Please wait "+error.networkResponse.headers.get("Retry-After"),MainActivity.this);
 
             }
         });
+    }
+    else versionCheck();
     }
 
 
@@ -429,6 +433,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(freeChampFragment!=null)getSupportFragmentManager().putFragment(outState,FREE_CHAMP_STATE,freeChampFragment);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        freeChampFragment= (FreeChampFragment) getSupportFragmentManager().getFragment(savedInstanceState,FREE_CHAMP_STATE);
+    }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -507,7 +522,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.printStackTrace();
+                if(error instanceof NetworkError)
+                    showToast("No internet connection", getApplicationContext());
             }
         });
     }
@@ -522,7 +539,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onFreeChampClicked() {
         if (freeChampFragment != null)
-            getSupportFragmentManager().beginTransaction().remove(freeChampFragment).commit();
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fab_out).remove(freeChampFragment).commit();
         setTitle(R.string.app_name);
     }
 

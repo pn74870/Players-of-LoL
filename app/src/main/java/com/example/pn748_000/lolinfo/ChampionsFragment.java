@@ -3,6 +3,8 @@ package com.example.pn748_000.lolinfo;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +50,7 @@ import static com.example.pn748_000.lolinfo.Utilities.stat;
 public class ChampionsFragment extends Fragment {
     private static final String ARG_ID="argumentID";
     private static final String ARG_REGION="argumentRegion";
+    private static final String STATE_LIST = "stateOfList";
     private int id;
     private RecyclerView recyclerView;
     private String region;
@@ -120,9 +123,18 @@ interface StatsListener{
         recyclerView= (RecyclerView) view.findViewById(R.id.championsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getAppContext()));
         recyclerView.setAdapter(adapter);
-        getChampsList();
+        if(savedInstanceState!=null) statsList=savedInstanceState.getParcelableArrayList(STATE_LIST);
+        else
+            getChampsList();
         return view;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(statsList!=null)outState.putParcelableArrayList(STATE_LIST,statsList);
+    }
+
     public void getChampsList(){
         showLog("getChampsList was called");
         requestJsonObject(getStatsUrl(id, region), new Response.Listener<JSONObject>() {
@@ -163,7 +175,7 @@ interface StatsListener{
         });
 
     }
-    class ChampionStats implements Comparable<ChampionStats>{
+    class ChampionStats implements Comparable<ChampionStats>, Parcelable{
         int kills,deaths,assists,cs,loses,wins,games;
         String champ;
         ChampionStats(int kills,int deaths,int assists,int cs,int loses,int wins){
@@ -177,9 +189,49 @@ interface StatsListener{
             games=wins+loses;
         }
 
+        protected ChampionStats(Parcel in) {
+            kills = in.readInt();
+            deaths = in.readInt();
+            assists = in.readInt();
+            cs = in.readInt();
+            loses = in.readInt();
+            wins = in.readInt();
+            games = in.readInt();
+            champ = in.readString();
+        }
+
+        public  final Creator<ChampionStats> CREATOR = new Creator<ChampionStats>() {
+            @Override
+            public ChampionStats createFromParcel(Parcel in) {
+                return new ChampionStats(in);
+            }
+
+            @Override
+            public ChampionStats[] newArray(int size) {
+                return new ChampionStats[size];
+            }
+        };
+
         @Override
         public int compareTo(ChampionStats championStats) {
             return championStats.games-games;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeInt(kills);
+            parcel.writeInt(deaths);
+            parcel.writeInt(assists);
+            parcel.writeInt(cs);
+            parcel.writeInt(loses);
+            parcel.writeInt(wins);
+            parcel.writeInt(games);
+            parcel.writeString(champ);
         }
     }
         class ChampionListViewHolder extends RecyclerView.ViewHolder{

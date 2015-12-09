@@ -27,6 +27,7 @@ import static com.example.pn748_000.lolinfo.Keys.URL_FREE_CHAMPS;
 import static com.example.pn748_000.lolinfo.Keys.URL_START_GLOBAL;
 //import static com.example.pn748_000.lolinfo.Keys.VERSION;
 
+import com.android.volley.NetworkError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -40,6 +41,7 @@ import org.json.JSONObject;
 
 import static com.example.pn748_000.lolinfo.Utilities.getImage;
 import static com.example.pn748_000.lolinfo.Utilities.requestJsonObject;
+import static com.example.pn748_000.lolinfo.Utilities.showToast;
 
 
 /**
@@ -168,7 +170,10 @@ public class FreeChampFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-            }
+                if(error instanceof NetworkError){
+                    showToast("No internet connection", getActivity());
+                    listener.onFreeChampClicked();
+            }}
         });
 
     }

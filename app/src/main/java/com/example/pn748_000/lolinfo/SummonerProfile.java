@@ -3,9 +3,12 @@ package com.example.pn748_000.lolinfo;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.Vector;
 
 import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON;
 import static com.example.pn748_000.lolinfo.Keys.PNG;
@@ -45,6 +49,7 @@ public class SummonerProfile extends Fragment {
     LinearLayout leagueLayout;
     TextView[] ranks, lpTxts, wlTexts;
     ImageView[] tierIcons;
+    ImageView[][] promos=new ImageView[3][];
     private Summoner summoner;
 
 
@@ -95,8 +100,16 @@ public class SummonerProfile extends Fragment {
                 (TextView) view.findViewById(R.id.wins_loses_3v3),
                 (TextView) view.findViewById(R.id.wins_loses_5v5),
                 (TextView) view.findViewById(R.id.wins_loses_5v5_t)};
+        View[] promosViews=new View[]{view.findViewById(R.id.promos_3v3),view.findViewById(R.id.promos_5v5),view.findViewById(R.id.promos_5v5_t)};
+        for(int i=0;i<3;i++) promos[i]=new ImageView[]{
+                (ImageView) promosViews[i].findViewById(R.id.promo1),
+                (ImageView) promosViews[i].findViewById(R.id.promo2),
+                (ImageView) promosViews[i].findViewById(R.id.promo3),
+                (ImageView) promosViews[i].findViewById(R.id.promo4),
+                (ImageView) promosViews[i].findViewById(R.id.promo5)};
         profileIconImageView = (ImageView) view.findViewById(R.id.icon_container);
         leagueLayout = (LinearLayout) view.findViewById(R.id.leaguesLayout);
+
   /*      editText = (EditText) view.findViewById(R.id.text_field);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -146,7 +159,7 @@ public class SummonerProfile extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (OnSummonerProfileInteractionListener) activity;
@@ -246,6 +259,23 @@ public class SummonerProfile extends Fragment {
                             lpTxts[i].setText(entry.getInt("leaguePoints")
                                     + " League Points");
                             wlTexts[i].setText(entry.getInt("wins")+" wins " + entry.getInt("losses")+" losses");
+                            if(entry.has("miniSeries")){
+                               JSONObject series =getJsonObjectFromJson(entry,"miniSeries");
+                               if(series!=null){
+                                   String progress=series.getString("progress");
+                                   char[] chars=progress.toCharArray();
+                                   for(int j=0;j<chars.length;j++){
+                                       switch (chars[j]){
+                                           case 'L':
+                                               promos[i][j].setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.red_cross_18dp));
+                                               break;
+                                           case 'W':
+                                               promos[i][j].setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.green_tick_18dp));
+                                               break;
+                                       }
+                                   }
+                               }
+                            }
                         }
                     }
                 } catch (JSONException e) {
@@ -282,11 +312,6 @@ public class SummonerProfile extends Fragment {
     }
 
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
 
 
 }

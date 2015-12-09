@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONArray;
@@ -56,6 +59,7 @@ import static com.example.pn748_000.lolinfo.Keys.URL_SUMMONER_SPELLS;
 import static com.example.pn748_000.lolinfo.Utilities.getBooleanFromJson;
 import static com.example.pn748_000.lolinfo.Utilities.getChampImg;
 import static com.example.pn748_000.lolinfo.Utilities.getIntFromJson;
+import static com.example.pn748_000.lolinfo.Utilities.getItemImgUrl;
 import static com.example.pn748_000.lolinfo.Utilities.getJsonObjectFromJson;
 import static com.example.pn748_000.lolinfo.Utilities.getStringFromJson;
 import static com.example.pn748_000.lolinfo.Utilities.matchType;
@@ -121,11 +125,7 @@ public class MatchHistory extends Fragment {
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getmRequestQueue();
         adapter=new MyAdapter(getActivity());
-        if(savedInstanceState!=null) {
-            list=savedInstanceState.getParcelableArrayList(STATE_LIST);
-            adapter.setData(list);
-        }
-        else list= new ArrayList<>();
+
          utilities=new Utilities() {
             @Override
             public void  onResponseReceived(int index,String champName) {
@@ -151,8 +151,13 @@ public class MatchHistory extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         recyclerView.setAdapter(adapter);
-
-refreshList();
+        if(savedInstanceState!=null) {
+            list=savedInstanceState.getParcelableArrayList(STATE_LIST);
+            region=savedInstanceState.getString(ARG_REGION);
+            adapter.setData(list);
+        }
+        else {list= new ArrayList<>();
+refreshList();}
 
         return view;
     }
@@ -165,7 +170,7 @@ refreshList();
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
@@ -211,6 +216,7 @@ refreshList();
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(STATE_LIST, list);
+        outState.putString(ARG_REGION,region);
     }
 
     public void refreshList(){
@@ -419,6 +425,7 @@ refreshList();
                             }
                         };
                         utilities.setItemImage(items[i], holder.items[i], MainActivity.version,true);
+                      //  Picasso.with(getActivity()).load(getItemImgUrl(items[i],MainActivity.version)).into(holder.items[i]);
                     } else {
                         holder.items[i].setImageDrawable(null);
                         if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN)
@@ -475,7 +482,8 @@ refreshList();
         private void getSpellImg(String spell, final ImageView imageView){
             if(spell!=null){
                 if(!NumberUtils.isNumber(spell))
-                    imageLoader.get(DDRAGON+MainActivity.version+DDRAGON_SPELL_IMG+spell+PNG, new ImageLoader.ImageListener() {
+                   // Picasso.with(getActivity()).load(DDRAGON+MainActivity.version+DDRAGON_SPELL_IMG+spell+PNG).into(imageView);
+                     imageLoader.get(DDRAGON+MainActivity.version+DDRAGON_SPELL_IMG+spell+PNG, new ImageLoader.ImageListener() {
                         @Override
                         public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                             imageView.setImageBitmap(response.getBitmap());

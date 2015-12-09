@@ -2,6 +2,7 @@ package com.example.pn748_000.lolinfo;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
@@ -28,7 +29,7 @@ public class LoadBitmapTask extends AsyncTask<Void,Void,Bitmap> {
     }
     @Override
     protected Bitmap doInBackground(Void... Voids) {
-        return Utilities.readBitmapFromSD(PROFILE_ICON+id+PNG,context);
+        return Utilities.readBitmapFromSD(PROFILE_ICON+id+PNG,context,48);
     }
 
     @Override
@@ -57,5 +58,6 @@ public class LoadBitmapTask extends AsyncTask<Void,Void,Bitmap> {
                 }
             });
         }}
+
 }
 

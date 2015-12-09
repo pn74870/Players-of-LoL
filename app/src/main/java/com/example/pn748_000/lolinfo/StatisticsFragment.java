@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
@@ -19,9 +20,10 @@ import java.util.Locale;
  */
 public class StatisticsFragment extends Fragment {
     private static final String ARG_STATS = "statsJson";//TODO might need to delete
+    private static final String STATE_STATS = "stateStats";
     private TableLayout table;
     private TextView pentas,quadras,triples,doubles,kills,killingSprees,mostKills,largestSpree,assists,gold,turrets,title;
-
+    private JSONObject stats;
     public StatisticsFragment() {
     }
 
@@ -35,7 +37,7 @@ public class StatisticsFragment extends Fragment {
     public void showStats(JSONObject stats){
         JSONObject statsObject=Utilities.getJsonObjectFromJson(stats,"stats");
         if (statsObject != null) {
-
+            this.stats=stats;
 
             pentas.setText(statsObject.optInt("totalPentaKills") + "");
             quadras.setText(statsObject.optInt("totalQuadraKills") + "");
@@ -77,6 +79,20 @@ public class StatisticsFragment extends Fragment {
          largestSpree = (TextView) view.findViewById(R.id.largest_killing_spree_number);
          table= (TableLayout) view.findViewById(R.id.stats_table);
          title= (TextView) view.findViewById(R.id.stats_title);
+        if(savedInstanceState!=null) {
+            try {
+                stats=new JSONObject(savedInstanceState.getString(STATE_STATS));
+                showStats(stats);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         return view;
         }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(STATE_STATS,stats.toString());
     }
+}

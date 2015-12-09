@@ -471,7 +471,7 @@ public static void startSummonerActivity(Summoner summoner,Context context) {
         }}
  public void findSummSpells(int id,String version,ImageView imageView){
      setItemImage(id, imageView, version, false);
-     showLog("trying find summ spell in ver "+version);
+     showLog("trying find summ spell in ver " + version);
  }
 
     public static String getItemImgUrl(int id, String version){
@@ -511,17 +511,54 @@ public static void startSummonerActivity(Summoner summoner,Context context) {
         }
         else showToast("External storage was not found.",context);
     }
-    public static Bitmap readBitmapFromSD(String name,Context context){
+    public static Bitmap readBitmapFromSD(String name,Context context,int dpSize){
         Bitmap bitmap=null;
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
             File file=new File(context.getExternalCacheDir(),name);
-            bitmap=BitmapFactory.decodeFile(file.getAbsolutePath());
+            bitmap=decodeSampledBitmap(file,MainActivity.screenDensity/160*dpSize,MainActivity.screenDensity/160*dpSize);
+
             showLog("getting bmp from "+file.getAbsolutePath());
         }
         else showLog("cant access SD");
         return bitmap;
     }
+    private static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
 
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+    private static Bitmap decodeSampledBitmap(File file,
+                                              int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return  BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+    }
     class ImgLoader implements ImageLoader.ImageListener {
         ImageView imageView;
         int id, versionIndex=-4;
