@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:id="@+id/matchBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="1dp"
+        android:background="@color/redColor"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:focusable="true"
+        android:layout_gravity="right|center_vertical"
+        >
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:padding="4dp">
+
+            <ImageView
+                android:id="@+id/champImg"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/typeTxt"
+                android:text="RANKED SOLO 5X5"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:layout_toRightOf="@id/champImg"/>
+            <ImageView
+                android:id="@+id/scoreImg"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="32dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_toRightOf="@id/champImg"
+
+                android:src="@drawable/score" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
+                android:layout_toRightOf="@id/champImg"
+                android:src="@drawable/gold"
+                android:id="@+id/goldImg"/>
+
+
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:layout_toRightOf="@id/champImg"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/minion"
+                android:id="@+id/minionImg"/>
+
+            <TextView
+
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/minionImg"
+                android:id="@+id/creepsTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="creeps" />
+            <TextView
+                android:layout_above="@id/creepsTxt"
+                android:layout_toRightOf="@id/goldImg"
+                android:id="@+id/goldTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="gold" />
+            <TextView
+                android:id="@+id/kdaTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/goldTxt"
+                android:layout_toRightOf="@id/scoreImg"
+                android:text="100/100/100" />
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rowCount="2"
+                android:columnCount="1"
+                android:layout_toRightOf="@id/champImg"
+
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="110dp"
+                android:id="@+id/grid1"
+
+
+                >
+                <ImageView
+
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:background="@drawable/border"
+                    android:id="@+id/summSpell1"/>
+                <ImageView
+
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:background="@drawable/border"
+                    android:id="@+id/summSpell2"/>
+
+                />
+
+            </GridLayout>
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rowCount="2"
+                android:columnCount="3"
+                android:layout_toRightOf="@id/grid1"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/grid2"
+
+                >
+                <ImageView
+
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+
+                    android:id="@+id/item1"/>
+                <ImageView
+
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+
+                    android:id="@+id/item2"/>
+                <ImageView
+
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+
+                    android:id="@+id/item3"/>
+                <ImageView
+
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+
+                    android:id="@+id/item4"/>
+                <ImageView
+
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+
+                    android:id="@+id/item5"/>
+                <ImageView
+
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+
+                    android:id="@+id/item6"
+                    />
+
+            </GridLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical">
+                <TextView
+
+
+                    android:id="@+id/durationTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="30 min"
+                    />
+                <TextView
+                    android:textSize="12sp"
+                    android:id="@+id/dateTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2015-12-29"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

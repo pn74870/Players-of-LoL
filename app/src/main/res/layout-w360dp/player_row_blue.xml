@@ -73,12 +73,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="W/L:0/0"
-                android:layout_marginLeft="95dp"
+                android:layout_marginLeft="110dp"
                 android:layout_toRightOf="@id/champIcon"
-                android:id="@+id/wins_loses"
-                android:layout_centerVertical="true"/>
-            <!--  android:layout_alignBottom="@id/summonerName"-->
-
+                android:layout_centerVertical="true"
+                android:id="@+id/wins_loses"/>
+            <!--android:layout_alignBottom="@id/summonerName"-->
             <ImageView
                 android:visibility="gone"
                 android:id="@+id/kda_img"
@@ -145,3 +144,4 @@
         android:id="@+id/buttons"/>
 
 </LinearLayout>
+

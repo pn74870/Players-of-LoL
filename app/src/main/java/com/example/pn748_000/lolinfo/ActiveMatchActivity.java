@@ -3,6 +3,8 @@ package com.example.pn748_000.lolinfo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -61,6 +63,13 @@ public class ActiveMatchActivity extends AppCompatActivity {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final int BLUE_TEAM_ID = -100;
     private static final int PURPLE_TEAM_ID = -200;
+    private static final String PLAYER_LIST_STATE = "playersState";
+    private static final String BANS_B_STATE = "bansBState";
+    private static final String BANS_P_STATE = "bansPState";
+    private static final String REGION_STATE = "regionState";
+    private static final String MATCH_STATE = "activeMatchState";
+    private static final String BANS_RECEIVED_STATE = "bansRecState"; //delete probably
+    private static final String BANS_NUMB_STATE = "numbOfBansState";
     private Summoner summoner;
     private ArrayList<String> bansB = new ArrayList<>(), bansP = new ArrayList<>();
     private ImageView[] bansChampBlue = new ImageView[3];
@@ -147,9 +156,56 @@ public class ActiveMatchActivity extends AppCompatActivity {
             bansChampBlue[i] = (ImageView) findViewById(bannedChampBlue[i]);
             bansChampPurple[i] = (ImageView) findViewById(bannedChampPurple[i]);
         }
-        getActiveMatch(activeMatchJson, region);
+       if(savedInstanceState==null) getActiveMatch(activeMatchJson, region);
+        else {
+           region=savedInstanceState.getString(REGION_STATE);
+           playersList=savedInstanceState.getParcelableArrayList(PLAYER_LIST_STATE);
+           bansB=savedInstanceState.getStringArrayList(BANS_B_STATE);
+           bansP=savedInstanceState.getStringArrayList(BANS_P_STATE);
+           try {
+               activeMatchJson=new JSONObject(savedInstanceState.getString(MATCH_STATE));
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+           if(activeMatchJson!=null) {
+               champsReceived=true;
+               bansReceived=true;
+               numbOfBans=savedInstanceState.getInt(BANS_NUMB_STATE);
+               setData();
+               for (int i = 0; i < numbOfBans; i++) {
+                   final int finalI = i;
+                   getImage(getChampImg(i < bansB.size() ? bansB.get(i) : bansP.get(i - bansB.size())), new ImageLoader.ImageListener() {
+                       @Override
+                       public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+
+                           if (finalI < bansB.size())
+                               bansChampBlue[finalI].setImageBitmap(response.getBitmap());
+                           else
+                               bansChampPurple[finalI - bansB.size()].setImageBitmap(response.getBitmap());
+
+                       }
+
+                       @Override
+                       public void onErrorResponse(VolleyError error) {
+                           error.printStackTrace();
+                       }
+                   });
+               }
+           }
+       }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(PLAYER_LIST_STATE, playersList);
+        outState.putStringArrayList(BANS_B_STATE, bansB);
+        outState.putStringArrayList(BANS_P_STATE, bansP);
+        outState.putString(REGION_STATE, region);
+        outState.putString(MATCH_STATE,activeMatchJson.toString());
+        outState.putBoolean(BANS_RECEIVED_STATE, bansReceived);
+        outState.putInt(BANS_NUMB_STATE,numbOfBans);
+    }
 
     private void getActiveMatch(JSONObject activeMatchObject, String region) {
 
@@ -584,7 +640,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
     }
 
 
-    class Player {
+    class Player implements Parcelable{
         String name, champ, tier, division;
         boolean blueTeam, unranked = true;
         int wins, loses, numbPlayed, lp, profileId, id;
@@ -592,7 +648,69 @@ public class ActiveMatchActivity extends AppCompatActivity {
         JSONArray runes, masteries;
         AlertDialog runeDialog, masteryDialog;
 
+        protected Player(){}
 
+        protected Player(Parcel in) {
+            name = in.readString();
+            champ = in.readString();
+            tier = in.readString();
+            division = in.readString();
+            blueTeam = in.readByte() != 0;
+            unranked = in.readByte() != 0;
+            wins = in.readInt();
+            loses = in.readInt();
+            numbPlayed = in.readInt();
+            lp = in.readInt();
+            profileId = in.readInt();
+            id = in.readInt();
+            k = in.readDouble();
+            d = in.readDouble();
+            a = in.readDouble();
+            try {
+                runes=new JSONArray(in.readString());
+                masteries=new JSONArray((in.readString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public final Creator<Player> CREATOR = new Creator<Player>() {
+            @Override
+            public Player createFromParcel(Parcel in) {
+                return new Player(in);
+            }
+
+            @Override
+            public Player[] newArray(int size) {
+                return new Player[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(name);
+            parcel.writeString(champ);
+            parcel.writeString(tier);
+            parcel.writeString(division);
+            parcel.writeByte((byte) (blueTeam ? 1 : 0));
+            parcel.writeByte((byte) (unranked ? 1 : 0));
+            parcel.writeInt(wins);
+            parcel.writeInt(loses);
+            parcel.writeInt(numbPlayed);
+            parcel.writeInt(lp);
+            parcel.writeInt(profileId);
+            parcel.writeInt(id);
+            parcel.writeDouble(k);
+            parcel.writeDouble(d);
+            parcel.writeDouble(a);
+            parcel.writeString(runes.toString());
+            parcel.writeString(masteries.toString());
+        }
     }
 
 

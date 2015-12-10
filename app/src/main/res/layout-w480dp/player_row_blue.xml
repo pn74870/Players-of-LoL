@@ -67,26 +67,34 @@
                 android:layout_toEndOf="@id/champName"
                 android:layout_alignBottom="@id/champName"
                 />
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:layout_centerInParent="true">
             <TextView
                 android:textSize="@dimen/active_match_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="W/L:0/0"
-                android:layout_marginLeft="95dp"
-                android:layout_toRightOf="@id/champIcon"
-                android:id="@+id/wins_loses"
-                android:layout_centerVertical="true"/>
-            <!--  android:layout_alignBottom="@id/summonerName"-->
 
+
+
+                android:id="@+id/wins_loses"/>
+            <!--android:layout_alignBottom="@id/summonerName"-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
             <ImageView
                 android:visibility="gone"
                 android:id="@+id/kda_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/score"
-                android:layout_alignLeft="@id/wins_loses"
-                android:layout_below="@id/wins_loses"/>
+                />
             <TextView
                 android:visibility="gone"
                 android:layout_width="wrap_content"
@@ -94,12 +102,11 @@
                 android:id="@+id/kda"
                 android:textSize="@dimen/active_match_text_size"
 
-                android:layout_toRightOf="@id/kda_img"
-                android:layout_alignBottom="@id/champName"
+
                 android:text="0/0/0"
                 />
-
-
+    </LinearLayout>
+</LinearLayout>
             <ImageView
                 android:padding="5dp"
                 android:layout_width="50dp"
