@@ -1,18 +1,13 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.preference.PreferenceManager;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.support.design.widget.NavigationView;
 
-import android.support.v4.view.MenuItemCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 
 import android.os.Bundle;
@@ -20,13 +15,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.LruCache;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +34,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.NetworkError;
 import com.android.volley.Response;
@@ -52,62 +44,57 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import static com.example.pn748_000.lolinfo.Keys.API_KEY;
-import static com.example.pn748_000.lolinfo.Keys.ARG_PARTICIPANTS;
-import static com.example.pn748_000.lolinfo.Keys.ARG_REGION;
-import static com.example.pn748_000.lolinfo.Keys.ARG_SUMMONER_OBJECT;
-import static com.example.pn748_000.lolinfo.Keys.HTTP;
-import static com.example.pn748_000.lolinfo.Keys.ID;
-import static com.example.pn748_000.lolinfo.Keys.PNG;
-import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON;
-import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON_ID;
-import static com.example.pn748_000.lolinfo.Keys.URL_ACTIVE_MATCH;
-import static com.example.pn748_000.lolinfo.Keys.URL_START_GLOBAL;
-import static com.example.pn748_000.lolinfo.Keys.URL_VERSION;
-import static com.example.pn748_000.lolinfo.Keys.URL_VERSION_LIST;
-import static com.example.pn748_000.lolinfo.Utilities.getIntFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getJsonObjectFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getPlatformID;
-import static com.example.pn748_000.lolinfo.Utilities.getStringFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.requestJsonArray;
-import static com.example.pn748_000.lolinfo.Utilities.requestJsonObject;
-import static com.example.pn748_000.lolinfo.Utilities.showLog;
-import static com.example.pn748_000.lolinfo.Utilities.showToast;
-import static com.example.pn748_000.lolinfo.Utilities.startSummonerActivity;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_PARTICIPANTS;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_REGION;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.ID;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON_ID;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_ACTIVE_MATCH;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_VERSION;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_VERSION_LIST;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getIntFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonObjectFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getPlatformID;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getStringFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonArray;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.showToast;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.startSummonerActivity;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener, FreeChampFragment.FreeChampClickListener {
-   private final static String ID_STATE = "id";
-   private final static String REGION_STATE = "regionState";
-   private final static String MODE_STATE="modeState";
-    private final static String FREE_CHAMP_STATE="freeChampFragState";
+    private final static String ID_STATE = "id";
+    private final static String REGION_STATE = "regionState";
+    private final static String MODE_STATE = "modeState";
+    private final static String FREE_CHAMP_STATE = "freeChampFragState";
     private Toolbar toolbar;
-    private  NavigationView navigationView;
-    private  DrawerLayout mDrawerLayout;
+    private NavigationView navigationView;
+    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private int mSelectedId;
-
+    private ImageView searchImg;
     private String region;
     private String summonerName;
-
-    public static String version;
-   private FreeChampFragment freeChampFragment;
-   private boolean typingName;
+    private boolean typingName = false;
+    protected static String version;
+    private FreeChampFragment freeChampFragment;
     protected static JSONObject summonerJsonObject;
     //   SearchView searchView;
     private String quer = "";
     protected static JSONArray versions;
     protected static LruCache<String, Bitmap> mMemoryCache;
     private DBAdapter dbAdapter;
-    protected static String extCacheDir;
     private RecyclerView recyclerView;
     private EditText editText;
     private SummonerListAdapter adapter;
-    private boolean profileMode;
+    private boolean profileMode, isSummonerSelected = false;
     protected static int screenDensity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -125,13 +112,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter = new SummonerListAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
+        searchImg = (ImageView) findViewById(R.id.search_btn);
+        searchImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (typingName) {
+                    editText.setText("");
+                    quer = "";
+                    searchImg.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_search_black_24dp));
+                    typingName = false;
+                }
+            }
+        });
         //   recyclerView.addItemDecoration(new RecyclerViewDivider(this));
         region = PreferenceManager.getDefaultSharedPreferences(this).getString(REGION_STATE, "euw");
-        profileMode=PreferenceManager.getDefaultSharedPreferences(this).getBoolean(MODE_STATE,true);
+        profileMode = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(MODE_STATE, true);
         versionCheck();
         dbAdapter = new DBAdapter(this);
-        extCacheDir = getExternalCacheDir().getAbsolutePath().toString();
+
+
         adapter.setData("");
         final View view = findViewById(R.id.app_bar_extension);
         editText = (EditText) view.findViewById(R.id.text_field);
@@ -143,6 +142,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (!typingName) {
+                    searchImg.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_close_black_24dp));
+                    typingName = true;
+                }
+                if (editText.getText().toString().equals("")) {
+                    searchImg.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_search_black_24dp));
+                    typingName = false;
+                }
 
             }
 
@@ -162,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return false;
             }
         });
+
         ImageButton submitBtn = (ImageButton) view.findViewById(R.id.sumbmitButton);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,51 +205,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         };
-        screenDensity=getResources().getDisplayMetrics().densityDpi;
+        screenDensity = getResources().getDisplayMetrics().densityDpi;
 
     }
 
-    public void searchSummoner(final String query, final String region) {
-        if(version!=null){
-        summonerName = query.replace(" ", "").toLowerCase();
-        showLog("submitted region " + region);
-        Utilities.requestJsonObject(Utilities.getSummonerUrl(region, StringEscapeUtils.escapeHtml4(summonerName)), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                quer = "";
 
-                typingName = false;
-                showLog("got data");
-                summonerJsonObject = getJsonObjectFromJson(response, summonerName);
-                String summonerName = getStringFromJson(summonerJsonObject, "name");
-                
-                if (!summonerName.equals(""))
-                    dbAdapter.insertData(summonerName, Utilities.getRegion(region),
-                            Utilities.getIntFromJson(summonerJsonObject, PROFILE_ICON_ID), getIntFromJson(summonerJsonObject, ID));
+    protected void searchSummoner(final String query, final String region) {
+        if (!isSummonerSelected) {
+            isSummonerSelected = true;
+            if (version != null) {
+                summonerName = query.replace(" ", "").toLowerCase();
+                Utilities.requestJsonObject(Utilities.getSummonerUrl(region, StringEscapeUtils.escapeHtml4(summonerName)), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        quer = "";
+                        typingName = false;
+                        summonerJsonObject = getJsonObjectFromJson(response, summonerName);
+                        String summonerName = getStringFromJson(summonerJsonObject, "name");
 
-                invalidateOptionsMenu();
-                if (profileMode)
-                    startSummonerActivity(Utilities.createSummonerObject(summonerJsonObject, region),MainActivity.this);
-                else getActiveMatch(getIntFromJson(summonerJsonObject, ID), region);
-                editText.setText(quer);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                if (error instanceof NetworkError)
-                    showToast("No internet connection", getApplicationContext());
-                else if (error.networkResponse!=null&&error.networkResponse.statusCode == 404)
-                    showToast("Summoner was not found", getApplicationContext());
-                else if(error.networkResponse!=null&&error.networkResponse.statusCode==429)
-                    showToast("Rate limit exceeded. Please wait "+error.networkResponse.headers.get("Retry-After"),MainActivity.this);
+                        if (!summonerName.equals(""))
+                            dbAdapter.insertData(summonerName, Utilities.getRegion(region),
+                                    Utilities.getIntFromJson(summonerJsonObject, PROFILE_ICON_ID), getIntFromJson(summonerJsonObject, ID));
 
-            }
-        });
+                        invalidateOptionsMenu();
+                        if (profileMode)
+                            startSummonerActivity(Utilities.createSummonerObject(summonerJsonObject, region), MainActivity.this);
+                        else getActiveMatch(getIntFromJson(summonerJsonObject, ID), region);
+                        editText.setText(quer);
+                        isSummonerSelected = false;
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        isSummonerSelected = false;
+                        error.printStackTrace();
+                        if (error instanceof NetworkError)
+                            showToast("No internet connection", getApplicationContext());
+                        else if (error.networkResponse != null && error.networkResponse.statusCode == 404)
+                            showToast("Summoner was not found", getApplicationContext());
+                        else if (error.networkResponse != null && error.networkResponse.statusCode == 429)
+                            showToast("Rate limit exceeded. Please wait " + error.networkResponse.headers.get("Retry-After"), MainActivity.this);
+
+                    }
+                });
+            } else versionCheck();
+        }
     }
-    else versionCheck();
-    }
-
 
 /*    @Override
     protected void onNewIntent(Intent intent) {
@@ -268,8 +278,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.menu_main, menu);
         menu.findItem(R.id.region_button).setTitle(region);
         String title;
-        if(profileMode)title="Profile";
-        else title="Match";
+        if (profileMode) title = "Profile";
+        else title = "Match";
         menu.findItem(R.id.match_or_profile_button).setTitle(title);
      /*   SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -330,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             popupMenu.show();
             return true;
         }
-        if (id==R.id.match_or_profile_button){
+        if (id == R.id.match_or_profile_button) {
             PopupMenu popupMenu = new PopupMenu(this, findViewById(R.id.match_or_profile_button));
             popupMenu.setOnMenuItemClickListener(this);
             MenuInflater inflater = popupMenu.getMenuInflater();
@@ -369,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle(R.string.app_name);
                 if (freeChampFragment != null)
                     getSupportFragmentManager().beginTransaction().remove(freeChampFragment).commit();
-                profileMode=true;
+                profileMode = true;
                 invalidateOptionsMenu();
 
                 break;
@@ -377,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle(R.string.navigation_item_2);
                 if (freeChampFragment == null)
                     freeChampFragment = FreeChampFragment.newInstance(region);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fab_in,R.anim.fab_out)
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fab_in, R.anim.fab_out)
                         .replace(R.id.fragment_container, freeChampFragment).commit();
 
 
@@ -386,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle(R.string.app_name);
                 if (freeChampFragment != null)
                     getSupportFragmentManager().beginTransaction().remove(freeChampFragment).commit();
-                profileMode=false;
+                profileMode = false;
                 invalidateOptionsMenu();
                /* if (summonerJsonObject != null) {
 
@@ -416,9 +426,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     manager.executePendingTransactions();
                     if (activeMatchFragment.activeMatchJson != response && Utilities.getIntFromJson(summonerJsonObject, "id") > 0)
                         activeMatchFragment.getActiveMatch(response,region);*/
-                    Intent intent=new Intent(MainActivity.this,ActiveMatchActivity.class);
-                    intent.putExtra(ARG_REGION,region).putExtra(ARG_PARTICIPANTS,response.toString());
-                    startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, ActiveMatchActivity.class);
+                intent.putExtra(ARG_REGION, region).putExtra(ARG_PARTICIPANTS, response.toString());
+                startActivity(intent);
 
             }
         }, new Response.ErrorListener() {
@@ -436,13 +446,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(freeChampFragment!=null)getSupportFragmentManager().putFragment(outState,FREE_CHAMP_STATE,freeChampFragment);
+        if (freeChampFragment != null && freeChampFragment.isAdded())
+            getSupportFragmentManager().putFragment(outState, FREE_CHAMP_STATE, freeChampFragment);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        freeChampFragment= (FreeChampFragment) getSupportFragmentManager().getFragment(savedInstanceState,FREE_CHAMP_STATE);
+        freeChampFragment = (FreeChampFragment) getSupportFragmentManager().getFragment(savedInstanceState, FREE_CHAMP_STATE);
     }
 
     @Override
@@ -482,10 +493,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //    regionButton.setText("TR");
                 break;
             case R.id.profile_item:
-                profileMode=true;
+                profileMode = true;
                 break;
             case R.id.match_item:
-                profileMode=false;
+                profileMode = false;
                 break;
 
         }
@@ -523,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                if(error instanceof NetworkError)
+                if (error instanceof NetworkError)
                     showToast("No internet connection", getApplicationContext());
             }
         });
@@ -532,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStop() {
         super.onStop();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(REGION_STATE, region).putBoolean(MODE_STATE,profileMode).apply();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(REGION_STATE, region).putBoolean(MODE_STATE, profileMode).apply();
 
     }
 

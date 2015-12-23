@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pn748_000.lolinfo">
+    package="com.pnapps.pn748_000.LoLPlayers">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".MyApplication"
+        android:name="com.pnapps.pn748_000.LoLPlayers.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:debuggable="true">
+        >
      <!--   <provider
             android:name=".SuggestionsContentProvider"
             android:authorities="com.example.pn748_000.lolinfo.SuggestionsContentProvider"
@@ -23,9 +23,10 @@
         </provider>-->
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.pnapps.pn748_000.LoLPlayers.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,14 +40,16 @@
 
         </activity>
         <activity
-            android:name=".SummonerActivity"
+            android:screenOrientation="portrait"
+            android:name="com.pnapps.pn748_000.LoLPlayers.SummonerActivity"
             android:label="@string/summoner_activity">
 
         </activity>
-        <activity android:name=".ActiveMatchActivity">
+        <activity android:name="com.pnapps.pn748_000.LoLPlayers.ActiveMatchActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.pn748_000.lolinfo.MainActivity" />
+                android:value="com.pnapps.pn748_000.LoLPlayers.MainActivity" />
         </activity>
 
     </application>

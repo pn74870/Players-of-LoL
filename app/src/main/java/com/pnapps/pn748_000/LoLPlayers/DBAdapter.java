@@ -1,18 +1,15 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.net.Uri;
-import android.os.Environment;
 import android.provider.BaseColumns;
-import static com.example.pn748_000.lolinfo.Keys.PNG;
-import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,25 +19,26 @@ import java.util.HashMap;
  * Created by pn748_000 on 8/23/2015.
  */
 public class DBAdapter {
+    private  static final int MAX_NUMBER_OF_ROWS =10;
     private static final HashMap<String,String> map=projectionMap();
     DBHelper dbHelper;
 
     public DBAdapter(Context context){
-
         dbHelper=new DBHelper(context);
     }
     public long insertData(String name,String region,int iconId,int id){
         Utilities.showLog("inserting data to db " + name + " " + region);
-
         SQLiteDatabase db=dbHelper.getWritableDatabase();
-
+       if(DatabaseUtils.queryNumEntries(db,DBHelper.TABLE_NAME)>= MAX_NUMBER_OF_ROWS){
+            deleteTheLastRow();
+       }
         ContentValues contentValues=new ContentValues();
-        contentValues.put(DBHelper.NAME,name);
-        contentValues.put(DBHelper.REGION,region);
+        contentValues.put(DBHelper.NAME, name);
+        contentValues.put(DBHelper.REGION, region);
         contentValues.put(DBHelper.ICON_RES, iconId);
         contentValues.put(DBHelper.SUMMONER_ID, id);
 
-        return db.insertWithOnConflict(DBHelper.TABLE_NAME,null,contentValues,SQLiteDatabase.CONFLICT_REPLACE);
+        return db.insertWithOnConflict(DBHelper.TABLE_NAME, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
     public Cursor getData(String selection,String[] selectionArgs, String sortOrder){
         SQLiteQueryBuilder builder=new SQLiteQueryBuilder();
@@ -68,6 +66,14 @@ public class DBAdapter {
         }
         cursor.close();
         return summoners;
+    }
+    private void deleteTheLastRow(){
+        SQLiteDatabase db=dbHelper.getWritableDatabase();
+        Cursor cursor=db.query(DBHelper.TABLE_NAME, new String[]{DBHelper._ID}, null, null, null, null, DBHelper._ID, " 1");
+        cursor.moveToFirst();
+        int lastRowId=cursor.getInt(cursor.getColumnIndex(DBHelper._ID));
+        db.delete(DBHelper.TABLE_NAME, DBHelper._ID + " = ?", new String[]{String.valueOf(lastRowId)});
+        cursor.close();
     }
     public void deleteRow(int summonerId){
         SQLiteDatabase db=dbHelper.getWritableDatabase();
@@ -108,7 +114,8 @@ public class DBAdapter {
       private static final String COMMA=",";
       private static final String UNIQUE=" UNIQUE";
       private static final String INT=" INTEGER, ";
-      private static final String CREATE_TABLE="CREATE TABLE "+TABLE_NAME+" ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +SUMMONER_ID+INT+ NAME +VARCHAR+COMMA+ REGION +VARCHAR+COMMA+ ICON_RES +INT+UNIQUE+"("+ SUMMONER_ID +")"+")";
+      private static final String CREATE_TABLE="CREATE TABLE "+TABLE_NAME+" ("+_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+              +SUMMONER_ID+INT+ NAME +VARCHAR+COMMA+ REGION +VARCHAR+COMMA+ ICON_RES +INT+UNIQUE+"("+ SUMMONER_ID +")"+")";
       private static final String SQL_DELETE_ENTRIES ="DROP TABLE IF EXISTS " +TABLE_NAME;
 
 

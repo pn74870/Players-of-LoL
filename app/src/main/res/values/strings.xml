@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoL Info</string>
+    <string name="app_name">LoL Players</string>
 
 
     <string name="action_settings">Settings</string>
@@ -22,6 +22,9 @@
     <string name="summoner_activity">Summoner</string>
     <string name="ranked_stats">Ranked statistics</string>
     <string name="no_ranked_games">No ranked games found</string>
+    <string name="unranked">Unranked</string>
+    <string name="most_played">Most played champions:</string>
+    <string name="not_started_game">The game has not started yet</string>
 
 
 </resources>

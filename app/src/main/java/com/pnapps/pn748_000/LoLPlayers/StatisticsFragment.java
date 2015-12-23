@@ -1,4 +1,4 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -93,6 +93,6 @@ public class StatisticsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(STATE_STATS,stats.toString());
+        if (stats!=null)outState.putString(STATE_STATS,stats.toString());
     }
 }

@@ -1,4 +1,4 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -6,9 +6,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.CancellationSignal;
 
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 /**

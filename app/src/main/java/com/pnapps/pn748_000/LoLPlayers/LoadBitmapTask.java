@@ -1,8 +1,7 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
@@ -11,8 +10,8 @@ import com.android.volley.toolbox.ImageLoader;
 
 import java.lang.ref.WeakReference;
 
-import static com.example.pn748_000.lolinfo.Keys.PNG;
-import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.PNG;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON;
 
 /**
  * Created by pn748_000 on 11/21/2015.

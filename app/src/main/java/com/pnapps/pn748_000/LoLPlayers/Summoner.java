@@ -1,11 +1,9 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by pn748_000 on 11/20/2015.
- */
+
 public class Summoner implements Parcelable {
     String name,region;
     int id,iconId,level;

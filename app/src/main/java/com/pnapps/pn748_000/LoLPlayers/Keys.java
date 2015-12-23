@@ -1,8 +1,5 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
-/**
- * Created by pn748_000 on 8/7/2015.
- */
 public interface Keys {
     String HTTP="https://";
     String API_KEY="?api_key=36b32bbf-27f2-417b-8044-265d65332c18";

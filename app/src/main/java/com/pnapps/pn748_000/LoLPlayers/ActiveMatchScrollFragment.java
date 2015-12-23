@@ -1,4 +1,4 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -25,11 +25,11 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON_ID;
-import static com.example.pn748_000.lolinfo.Utilities.getChampImg;
-import static com.example.pn748_000.lolinfo.Utilities.getImage;
-import static com.example.pn748_000.lolinfo.Utilities.getJsonArrayFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.showLog;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON_ID;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getChampImg;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getImage;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonArrayFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
 
 /**
  * Created by pn748_000 on 12/3/2015.

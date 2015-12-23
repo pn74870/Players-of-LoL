@@ -1,4 +1,4 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 
 import android.os.Bundle;
@@ -30,10 +30,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON_ID;
-import static com.example.pn748_000.lolinfo.Utilities.getJsonArrayFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON_ID;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonArrayFromJson;
 
-import static com.example.pn748_000.lolinfo.Utilities.showLog;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
 
 
 /**

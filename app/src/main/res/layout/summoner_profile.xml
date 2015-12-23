@@ -1,9 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.pn748_000.lolinfo.BlankFragment">
+    tools:context="com.pnapps.pn748_000.LoLPlayers.BlankFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -74,18 +74,59 @@
 
                 </LinearLayout>
 
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <TextView
-
-
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_toRightOf="@id/level_text"
+                    android:text="@string/most_played"
+                    android:id="@+id/most_played_txt"/>
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                   >
+                    <LinearLayout
 
+                    android:layout_row="0"
+                    android:layout_column="0">
 
-                    android:textSize="20sp" />
+                    <include layout="@layout/favourite_champ"
+                        android:id="@+id/favouriteChamp1"/>
+                </LinearLayout>
+                    <LinearLayout
+                        android:layout_row="0"
+                        android:layout_column="1">
+
+                        <include layout="@layout/favourite_champ"
+                            android:id="@+id/favouriteChamp2" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_row="0"
+                        android:layout_column="2">
+
+                        <include layout="@layout/favourite_champ"
+                            android:id="@+id/favouriteChamp3" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_row="0"
+                        android:layout_column="3">
+
+                        <include layout="@layout/favourite_champ"
+                            android:id="@+id/favouriteChamp4"/>
+                    </LinearLayout>
+                </GridLayout>
             </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/leaguesLayout"
                 android:layout_width="match_parent"

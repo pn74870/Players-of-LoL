@@ -1,11 +1,7 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -16,19 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.ref.WeakReference;
-import java.util.Vector;
-
-import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON;
-import static com.example.pn748_000.lolinfo.Keys.PNG;
 //import static com.example.pn748_000.lolinfo.Keys.VERSION;
 
 
@@ -41,17 +27,16 @@ public class SummonerProfile extends Fragment {
 
     // TODO: Rename and change types of parameters
 
-    VolleySingleton volleySingleton;
-    RequestQueue requestQueue;
-    private OnSummonerProfileInteractionListener mListener;
-    TextView nameTextView, levelTxt, regionTxt;
-    ImageView profileIconImageView;
-    LinearLayout leagueLayout;
-    TextView[] ranks, lpTxts, wlTexts;
-    ImageView[] tierIcons;
-    ImageView[][] promos=new ImageView[3][];
-    private Summoner summoner;
 
+    private OnSummonerProfileInteractionListener mListener;
+    private TextView nameTextView, levelTxt, regionTxt;
+    private ImageView profileIconImageView;
+    private LinearLayout leagueLayout;
+    private TextView[] ranks, lpTxts, wlTexts;
+    private ImageView[] tierIcons;
+    private ImageView[][] promos=new ImageView[3][];
+    private Summoner summoner;
+    private LinearLayout[] favChamps;
 
     public static SummonerProfile newInstance(Summoner summoner) {
         SummonerProfile fragment = new SummonerProfile();
@@ -70,8 +55,7 @@ public class SummonerProfile extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utilities.showLog("onCreate summ prof");
-        volleySingleton = VolleySingleton.getInstance();
-        requestQueue = volleySingleton.getmRequestQueue();
+
         if (getArguments() != null)
             summoner = getArguments().getParcelable(ARG_SUMMONER);
 
@@ -83,7 +67,11 @@ public class SummonerProfile extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.summoner_profile, container, false);
-
+        favChamps=new LinearLayout[]{
+                (LinearLayout) view.findViewById(R.id.favouriteChamp1),
+                (LinearLayout) view.findViewById(R.id.favouriteChamp2),
+                (LinearLayout) view.findViewById(R.id.favouriteChamp3),
+                (LinearLayout) view.findViewById(R.id.favouriteChamp4)};
         ranks = new TextView[]{
                 (TextView) view.findViewById(R.id.rank_text_3v3),
                 (TextView) view.findViewById(R.id.rank_text),
@@ -150,7 +138,12 @@ public class SummonerProfile extends Fragment {
 
         return view;
     }
-
+    protected void setFavouriteChamp(int champNumber, Bitmap champImg, int games){
+        ImageView imgView= (ImageView) favChamps[champNumber].findViewById(R.id.favouriteChampImg);
+        imgView.setImageBitmap(champImg);
+        TextView textView= (TextView) favChamps[champNumber].findViewById(R.id.favouriteChampTxt);
+        textView.setText(String.format("%s games",games));
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void sendSummonerNameToActivity(String name) {
         if (mListener != null) {
@@ -227,7 +220,7 @@ public class SummonerProfile extends Fragment {
                 int[] scores = {0, 0, 0};
                 int[] bestIndexes = {-1, -1, -1};
                 String[] queues = {"RANKED_TEAM_3x3", "RANKED_SOLO_5x5", "RANKED_TEAM_5x5"};
-
+                if(array!=null){
                 try {
                     for (int i = 0; i < array.length(); i++) {
 
@@ -280,7 +273,7 @@ public class SummonerProfile extends Fragment {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
+                }}
             }
 
 

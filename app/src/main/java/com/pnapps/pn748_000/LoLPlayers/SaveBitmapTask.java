@@ -1,12 +1,10 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
-/**
- * Created by pn748_000 on 11/21/2015.
- */
+
 public class SaveBitmapTask extends AsyncTask<Void,Void,Void> {
     String name;
     Bitmap bitmap;

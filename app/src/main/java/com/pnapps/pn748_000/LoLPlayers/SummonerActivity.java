@@ -1,7 +1,6 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
-import android.os.Build;
-import android.support.v4.app.NavUtils;
+import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,13 +11,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import org.json.JSONObject;
 
-import static com.example.pn748_000.lolinfo.Keys.ARG_SUMMONER_OBJECT;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_SUMMONER_OBJECT;
 
 /**
  * Created by pn748_000 on 11/15/2015.
@@ -121,6 +118,11 @@ public class SummonerActivity extends AppCompatActivity implements MatchHistory.
     public void onStatsReceived(JSONObject stats) {
         Utilities.showLog("onStatsReceived");
         if(statisticsFragment!=null)statisticsFragment.showStats(stats);
+    }
+
+    @Override
+    public void onListCompleted(int index, Bitmap bitmap,int games) {
+            if(summonerProfile!=null)summonerProfile.setFavouriteChamp(index,bitmap,games);
     }
 
 

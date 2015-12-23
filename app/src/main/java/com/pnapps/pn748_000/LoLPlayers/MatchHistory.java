@@ -1,11 +1,6 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,44 +22,40 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 
-import static com.example.pn748_000.lolinfo.Keys.API_KEY;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
 
-import static com.example.pn748_000.lolinfo.Keys.API_KEY_AND;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY_AND;
 
-import static com.example.pn748_000.lolinfo.Keys.DDRAGON;
-import static com.example.pn748_000.lolinfo.Keys.DDRAGON_SPELL_IMG;
-import static com.example.pn748_000.lolinfo.Keys.HTTP;
-import static com.example.pn748_000.lolinfo.Keys.PNG;
-import static com.example.pn748_000.lolinfo.Keys.RECENT;
-import static com.example.pn748_000.lolinfo.Keys.URL_CHAMPION;
-import static com.example.pn748_000.lolinfo.Keys.URL_CHAMP_ICON;
-import static com.example.pn748_000.lolinfo.Keys.URL_MATCH_HISTORY;
-import static com.example.pn748_000.lolinfo.Keys.URL_START;
-import static com.example.pn748_000.lolinfo.Keys.URL_START_GLOBAL;
-import static com.example.pn748_000.lolinfo.Keys.URL_SUMMONER_SPELLS;
-import static com.example.pn748_000.lolinfo.Utilities.getBooleanFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getChampImg;
-import static com.example.pn748_000.lolinfo.Utilities.getIntFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getItemImgUrl;
-import static com.example.pn748_000.lolinfo.Utilities.getJsonObjectFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getStringFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.matchType;
-import static com.example.pn748_000.lolinfo.Utilities.showLog;
-import static com.example.pn748_000.lolinfo.Utilities.stat;
-import static com.example.pn748_000.lolinfo.Utilities.requestJsonObject;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.DDRAGON;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.DDRAGON_SPELL_IMG;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.PNG;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.RECENT;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMPION;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMP_ICON;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_MATCH_HISTORY;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_SUMMONER_SPELLS;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getBooleanFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getChampImg;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getIntFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonObjectFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getStringFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.matchType;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.stat;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -198,7 +188,7 @@ refreshList();}
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and nameTextView
-        public void onFragmentInteraction(Uri uri);
+         void onFragmentInteraction(Uri uri);
     }
 
 

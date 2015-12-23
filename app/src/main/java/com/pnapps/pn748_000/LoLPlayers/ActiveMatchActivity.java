@@ -1,4 +1,4 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -33,26 +33,26 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.pn748_000.lolinfo.Keys.API_KEY;
-import static com.example.pn748_000.lolinfo.Keys.API_KEY_AND;
-import static com.example.pn748_000.lolinfo.Keys.ARG_PARTICIPANTS;
-import static com.example.pn748_000.lolinfo.Keys.ARG_REGION;
-import static com.example.pn748_000.lolinfo.Keys.HTTP;
-import static com.example.pn748_000.lolinfo.Keys.MASTERY_TREE;
-import static com.example.pn748_000.lolinfo.Keys.PROFILE_ICON_ID;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY_AND;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_PARTICIPANTS;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_REGION;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.MASTERY_TREE;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON_ID;
 
-import static com.example.pn748_000.lolinfo.Keys.URL_MASTERY;
-import static com.example.pn748_000.lolinfo.Keys.URL_RUNE;
-import static com.example.pn748_000.lolinfo.Keys.URL_START_GLOBAL;
-import static com.example.pn748_000.lolinfo.Utilities.createSummonerObject;
-import static com.example.pn748_000.lolinfo.Utilities.getChampImg;
-import static com.example.pn748_000.lolinfo.Utilities.getImage;
-import static com.example.pn748_000.lolinfo.Utilities.getJsonArrayFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getJsonObjectFromJson;
-import static com.example.pn748_000.lolinfo.Utilities.getSummonerUrl;
-import static com.example.pn748_000.lolinfo.Utilities.requestJsonObject;
-import static com.example.pn748_000.lolinfo.Utilities.showLog;
-import static com.example.pn748_000.lolinfo.Utilities.startSummonerActivity;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_MASTERY;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_RUNE;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.createSummonerObject;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getChampImg;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getImage;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonArrayFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonObjectFromJson;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getSummonerUrl;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.startSummonerActivity;
 
 /**
  * Created by pn748_000 on 11/27/2015.
@@ -239,9 +239,11 @@ public class ActiveMatchActivity extends AppCompatActivity {
             if (bar != null)
                 bar.setTitle(Utilities.matchType("", "", "", Utilities.stat(activeMatchObject, "gameQueueConfigId")));
             try {
+                if(activeMatchObject.getLong("gameStartTime")>0){
                 Date date = new Date(activeMatchObject.getLong("gameStartTime"));
-                showLog(DateFormat.getDateTimeInstance().format(date)); //TODO might need rework
-                gameStart.setText(DateFormat.getTimeInstance().format(date));
+                showLog(DateFormat.getDateTimeInstance().format(date));
+                gameStart.setText(DateFormat.getTimeInstance().format(date));}
+                else gameStart.setText(R.string.not_started_game);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -338,7 +340,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
             showLog("new string " + values[i]);
             if (!values[i].isEmpty()) {
                 String[] tempArray = values[i].split(" ", 2);
-                showLog("splitted string " + tempArray);
+
                 double value;
                 String key;
                 if (tempArray[0].contains("%")) {
@@ -362,14 +364,13 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 //TODO try null listener
             }
         });
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (Map.Entry<String, Double> entry : map.entrySet()) {
             String sign = entry.getValue() > 0 ? "+" : "";
 
             if(entry.getKey().contains("("))
-                buffer.append(sign + String.format(Locale.UK, "%.2f", entry.getValue()) + " " + entry.getKey()
-                        +String.format(Locale.UK,"%.2f",entry.getValue()*18)+" at champion level 18)\n");
-            else buffer.append(sign + String.format(Locale.UK, "%.2f", entry.getValue()) + " " + entry.getKey()+"\n");
+                buffer.append(String.format(Locale.UK, "%s %.2f %s %.2f at champion level 18)\n",sign, entry.getValue(),entry.getKey(),entry.getValue()*18));
+            else buffer.append(String.format(Locale.UK, "%s %.2f %s \n",sign, entry.getValue(), entry.getKey()));
             showLog(buffer.toString());
         }
         return dialogBuilder.setMessage(buffer.toString()).create();
@@ -594,8 +595,8 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 } else {
 
 
-                    lp.setText(player.lp + "LP");
-                    rank.setText(player.tier + " " + player.division);
+                    lp.setText(String.format("%d LP",player.lp ));
+                    rank.setText(String.format("%s %s",player.tier, player.division));
 
                     tierIcon.setImageResource(Utilities.getTierImage(player.tier, player.division));
                 }

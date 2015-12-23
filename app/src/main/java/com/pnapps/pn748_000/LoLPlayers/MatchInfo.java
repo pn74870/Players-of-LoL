@@ -1,12 +1,8 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by pn748_000 on 8/17/2015.
- */
 public class MatchInfo implements Parcelable {
     int kills,assists,deaths,creeps,gold,id,matchIndexInList; //id might be unused
     long date,duration;

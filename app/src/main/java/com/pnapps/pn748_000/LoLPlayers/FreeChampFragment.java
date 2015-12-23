@@ -1,9 +1,7 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,37 +9,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import static com.example.pn748_000.lolinfo.Keys.API_KEY;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
 
-import static com.example.pn748_000.lolinfo.Keys.ARG_REGION;
-import static com.example.pn748_000.lolinfo.Keys.DDRAGON;
-import static com.example.pn748_000.lolinfo.Keys.HTTP;
-import static com.example.pn748_000.lolinfo.Keys.JPG0;
-import static com.example.pn748_000.lolinfo.Keys.URL_CHAMPION;
-import static com.example.pn748_000.lolinfo.Keys.URL_CHAMP_ICON;
-import static com.example.pn748_000.lolinfo.Keys.URL_CHAMP_LOADING;
-import static com.example.pn748_000.lolinfo.Keys.URL_FREE_CHAMPS;
-import static com.example.pn748_000.lolinfo.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_REGION;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.JPG0;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMPION;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMP_LOADING;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_FREE_CHAMPS;
+import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
 //import static com.example.pn748_000.lolinfo.Keys.VERSION;
 
 import com.android.volley.NetworkError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.example.pn748_000.lolinfo.Utilities.getImage;
-import static com.example.pn748_000.lolinfo.Utilities.requestJsonObject;
-import static com.example.pn748_000.lolinfo.Utilities.showToast;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.getImage;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.showToast;
 
 
 /**

@@ -1,11 +1,9 @@
-package com.example.pn748_000.lolinfo;
+package com.pnapps.pn748_000.LoLPlayers;
 
 import android.app.Application;
 import android.content.Context;
 
-/**
- * Created by pn748_000 on 8/2/2015.
- */
+
 public class MyApplication extends Application {
     private static MyApplication sInstance;
 
