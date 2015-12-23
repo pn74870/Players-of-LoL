@@ -86,7 +86,7 @@
         android:id="@+id/kda_number"
         android:layout_toLeftOf="@id/minion_image"
         android:layout_centerVertical="true"
-        android:layout_marginRight="17dp"
+        android:layout_marginRight="10dp"
         android:text="10.0/10.0/10.0"
         />
     <ImageView
@@ -95,7 +95,7 @@
         android:src="@drawable/score"
         android:layout_toLeftOf="@id/kda_number"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="2dp"/>
 
 </RelativeLayout>
 </android.support.v7.widget.CardView>

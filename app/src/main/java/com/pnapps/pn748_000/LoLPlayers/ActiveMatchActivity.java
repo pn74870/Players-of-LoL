@@ -209,7 +209,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
 
     private void getActiveMatch(JSONObject activeMatchObject, String region) {
 
-        showLog("getActiveMatch was called");
+
 
         JSONArray participants = getJsonArrayFromJson(activeMatchObject, "participants");
 
@@ -221,7 +221,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 for (int i = 0; i < bannedChamps.length(); i++) {
                     try {
                         JSONObject object = bannedChamps.getJSONObject(i);
-                        showLog("team id for banned champ " + object.getInt("teamId"));
                         utilities.champNameFromId(-object.getInt("teamId"), this, object.getInt("championId"), region);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -241,7 +240,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
             try {
                 if(activeMatchObject.getLong("gameStartTime")>0){
                 Date date = new Date(activeMatchObject.getLong("gameStartTime"));
-                showLog(DateFormat.getDateTimeInstance().format(date));
                 gameStart.setText(DateFormat.getTimeInstance().format(date));}
                 else gameStart.setText(R.string.not_started_game);
             } catch (JSONException e) {
@@ -250,7 +248,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
             ids = new int[participants.length()];
 
             for (int i = 0; i < participants.length(); i++) {
-                showLog("participants loop " + i);
                 try {
 
 
@@ -371,7 +368,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
             if(entry.getKey().contains("("))
                 buffer.append(String.format(Locale.UK, "%s %.2f %s %.2f at champion level 18)\n",sign, entry.getValue(),entry.getKey(),entry.getValue()*18));
             else buffer.append(String.format(Locale.UK, "%s %.2f %s \n",sign, entry.getValue(), entry.getKey()));
-            showLog(buffer.toString());
+
         }
         return dialogBuilder.setMessage(buffer.toString()).create();
     }
@@ -389,7 +386,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     try {
                        String tree= response.getString("masteryTree");
-                        showLog("tree is "+tree);
                         switch (tree){
                             case "Ferocity": trees[0]+=mastery.getInt("rank");
                                 break;
@@ -400,7 +396,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
                         }
                         numbOfCompletedMasteries++;
                         if(numbOfCompletedMasteries==masteries.length()) {
-                            showLog("creating mastery dialog");
                             AlertDialog.Builder builder=new AlertDialog.Builder(ActiveMatchActivity.this);
                             player.masteryDialog=builder.setTitle("Masteries").setPositiveButton("OK",null).setMessage("Ferocity/"+trees[0]+"\n"+
                                     "Cunning/"+trees[1]+"\n"+"Resolve/"+trees[2]+"\n").create();
@@ -428,12 +423,11 @@ public class ActiveMatchActivity extends AppCompatActivity {
 
             final JSONObject rune = runes.getJSONObject(i);
 
-            showLog(HTTP + URL_START_GLOBAL + region + URL_RUNE + rune.getInt("runeId") + API_KEY);
             requestJsonObject(HTTP + URL_START_GLOBAL + region + URL_RUNE + rune.getInt("runeId") + API_KEY, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        showLog("got description of rune " + response.getString("description"));
+
                         KeyAndValue[] valuesAndKeys = splitRuneStats(response.getString("description"));
                         int count = rune.getInt("count");
                         for (KeyAndValue current : valuesAndKeys) {
@@ -443,7 +437,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
                                     if (runeMap.containsKey(current.key)) {
                                         runeMap.put(current.key, runeMap.get(current.key) + current.value * count);
                                     } else runeMap.put(current.key, current.value * count);
-                                    showLog("value & key & count: " + current.value + " " + current.key + " " + count);
+
                                 }
                             }
                         }
@@ -466,7 +460,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
     }
 
     void onArrayReceived(JSONArray jsonArray, int in) throws JSONException {
-        showLog("array received");
         if (jsonArray != null) {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject entry = jsonArray.getJSONObject(i);
@@ -485,7 +478,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 }
             }
         }
-        showLog("the length of the list " + playersList.size());
 
         if (in + 1 == playersList.size()) {
             champsReceived = true;
@@ -495,7 +487,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
     }
 
     private void setData() {
-        showLog("set data was called champsreceived " + champsReceived + " bans received " + bansReceived);
         if (champsReceived && bansReceived) {
             settingData = true;
 
@@ -556,7 +547,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 runesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showLog("rune btn was clicked");
                         try {
                             if (player.runeDialog == null)
                                 showRunesDialog(player);
@@ -569,7 +559,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 masteriesBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showLog("masteries btn was clicked");
                         try {
                             if(player.masteryDialog==null)
                                 showMasteriesDialog(player);

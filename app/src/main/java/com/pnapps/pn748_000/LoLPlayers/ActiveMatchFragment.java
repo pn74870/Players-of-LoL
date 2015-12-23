@@ -123,7 +123,6 @@ public class ActiveMatchFragment extends Fragment {
 
     void getActiveMatch(JSONObject activeMatchObject, String region) {
 
-        showLog("getActiveMatch was called");
         this.region = region;
         JSONArray participants = getJsonArrayFromJson(activeMatchObject, "participants");
         if (participants != null) {
@@ -135,7 +134,6 @@ public class ActiveMatchFragment extends Fragment {
             ids = new int[participants.length()];
 
             for (int i = 0; i < participants.length(); i++) {
-                showLog("participants loop "+i);
                 try {
 
 
@@ -197,14 +195,12 @@ public class ActiveMatchFragment extends Fragment {
     }
 
     void champNameReceived(final String name, final int index) {
-        showLog("champ name received");
         playersList.get(index).champ = name;
         if (index == ids.length - 1) utilities.getLeagueEntry(ids, region);
 
     }
 
     void onArrayReceived(JSONArray jsonArray, int in) throws JSONException {
-        showLog("array received");
         if (jsonArray != null) {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject entry = jsonArray.getJSONObject(i);
@@ -223,10 +219,8 @@ public class ActiveMatchFragment extends Fragment {
                 }
             }
         }
-        showLog("the length of the list " + playersList.size());
 
         if (in+1==playersList.size()) {
-            showLog("notifying adapter " + playersList.size());
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             adapter = new ActiveMatchAdapter(playersList);
             recyclerView.setAdapter(adapter);
@@ -344,7 +338,7 @@ public class ActiveMatchFragment extends Fragment {
                     }
                 });
 
-            } else showLog("player is null @ position " + position);
+            }
         }
 
       /*  @Override
@@ -353,7 +347,6 @@ public class ActiveMatchFragment extends Fragment {
             return playersList.size();
         }*/
         public void setData(ArrayList<Player> players) {
-            showLog("setting data");
             data = players;
             notifyItemRangeChanged(0, players.size());
             notifyDataSetChanged();
@@ -367,7 +360,6 @@ public class ActiveMatchFragment extends Fragment {
 
             public ActiveMatchViewHolderP(View v) {
                 super(v);
-                showLog("parent constructor was called");
                 background = (RelativeLayout) v.findViewById(R.id.playerParentLayout);
                 name = (TextView) v.findViewById(R.id.summonerName);
                 champName = (TextView) v.findViewById(R.id.champName);
@@ -409,7 +401,6 @@ public class ActiveMatchFragment extends Fragment {
          TextView idTest;
          public ActiveMatchViewHolderC(View itemView) {
              super(itemView);
-             showLog("child constructor was called");
            //  idTest= (TextView) itemView.findViewById(R.id.id_test);
          }
      }

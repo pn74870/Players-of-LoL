@@ -89,7 +89,7 @@ public class ActiveMatchScrollFragment extends Fragment {
             utilitiesForBans=new Utilities() {
                 @Override
                 public void onResponseReceived(final int index, final String champName) {
-                    showLog("getting image from " + getChampImg(champName));
+
                     if(index==100){
                         if(numbB<bansB.length){
                             bansB[numbB]=champName;
@@ -112,7 +112,7 @@ public class ActiveMatchScrollFragment extends Fragment {
 
                 @Override
                 public void onResponseReceived(int index, JSONArray array) {
-                    showLog("this should never happen");
+
                 }
             };
 
@@ -123,14 +123,13 @@ public class ActiveMatchScrollFragment extends Fragment {
             utilities = new Utilities() {
                 @Override
                 public void onResponseReceived(int index, String champName) {
-                    showLog("response received 1");
+
                     champNameReceived(champName, index);
 
                 }
 
                 @Override
                 public void onResponseReceived(int index, JSONArray array) {
-                    showLog("response received 2");
                     try {
                         onArrayReceived(array, index);
                     } catch (JSONException e) {
@@ -161,7 +160,7 @@ public class ActiveMatchScrollFragment extends Fragment {
 
       protected void getActiveMatch(JSONObject activeMatchObject, String region) {
 
-            showLog("getActiveMatch was called");
+
             this.region = region;
             JSONArray participants = getJsonArrayFromJson(activeMatchObject, "participants");
 
@@ -172,7 +171,7 @@ public class ActiveMatchScrollFragment extends Fragment {
             for(int i=0;i<bannedChamps.length();i++){
                 try {
                     JSONObject object=bannedChamps.getJSONObject(i);
-                    showLog("team id for banned champ " + object.getInt("teamId"));
+
                    utilitiesForBans.champNameFromId(object.getInt("teamId"), getActivity(),object.getInt("championId"),region);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -196,7 +195,7 @@ public class ActiveMatchScrollFragment extends Fragment {
                 ids = new int[participants.length()];
 
                 for (int i = 0; i < participants.length(); i++) {
-                    showLog("participants loop "+i);
+
                     try {
 
 
@@ -258,14 +257,12 @@ public class ActiveMatchScrollFragment extends Fragment {
         }
 
         void champNameReceived(final String name, final int index) {
-            showLog("champ name received");
             playersList.get(index).champ = name;
             if (index == ids.length - 1) utilities.getLeagueEntry(ids, region);
 
         }
 
         void onArrayReceived(JSONArray jsonArray, int in) throws JSONException {
-            showLog("array received");
             if (jsonArray != null) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject entry = jsonArray.getJSONObject(i);
@@ -284,7 +281,7 @@ public class ActiveMatchScrollFragment extends Fragment {
                     }
                 }
             }
-            showLog("the length of the list " + playersList.size());
+
 
             if (in+1==playersList.size()){
                 champsReceived=true;
@@ -293,7 +290,6 @@ public class ActiveMatchScrollFragment extends Fragment {
             }
         }
     private void setData(){
-        showLog("set data was called champsreceived "+champsReceived+" bans received "+bansReceivedP+" "+ bansReceivedB);
         if(champsReceived&&bansReceivedB&&bansReceivedP){
         settingData=true;
 

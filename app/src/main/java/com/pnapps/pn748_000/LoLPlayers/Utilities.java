@@ -291,40 +291,48 @@ public abstract class Utilities {
     }
 
 
-    public void champNameFromId(final int index, Context context, final int champId, String region) {
+    public void champNameFromId(final int index, Context context, final int champId, final String region) {
         final SharedPreferences champIdPrefs = context.getSharedPreferences(context.getResources().getString(R.string.champIdPreferences), Context.MODE_PRIVATE);
-        String champName = champIdPrefs.getString(champId + "", "");
-        showLog("getting champ " + champId);
+        if (!champIdPrefs.contains(champId + "")) {
 
-        if (champName.equals("")) {
-            showLog("getting champ from " + getChampNameRequestUrl(champId, region));
+             Response.ErrorListener errorListener=new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            };
             JsonObjectRequest champRequest = new JsonObjectRequest(Request.Method.GET, getChampNameRequestUrl(champId, region), (String) null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
 
-                        final String champion = response.getString("key");
+                        String champion = response.getString("key");
                         champIdPrefs.edit().putString(champId + "", champion).apply();
+                        showLog("utils respons "+index+" "+champId);
+
+                        onResponseReceived(index, champion);//}
 
 
-                        onResponseReceived(index, champion);
-                        Log.e("asd", "champion " + champion + " was cached");
+                           // requestJsonObject(getChampNameRequestUrl(champId, region),this,errorListener);
+                    //    }
+
+
 
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                }
-            });
+            }, errorListener);
             VolleySingleton.getInstance().getmRequestQueue().add(champRequest);
-        } else onResponseReceived(index, champName);
+        } else {
+            String champName = champIdPrefs.getString(champId + "", "");
+            if (!champName.isEmpty()) {
+                onResponseReceived(index, champName);
 
+            }
 
+        }
     }
 
     public abstract void onResponseReceived(int index, String champName);
@@ -368,7 +376,7 @@ public abstract class Utilities {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        showLog("value is not found");
+
         return -1;
     }
 
@@ -398,7 +406,7 @@ public abstract class Utilities {
         try {
             if (object != null && object.has(name) && !object.isNull(name))
                 return object.getJSONObject(name);
-            else showLog("Couldnt find " + name);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -430,7 +438,6 @@ public abstract class Utilities {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 if (error.networkResponse != null && error.networkResponse.statusCode == 404) {
-                    showLog("no ranked games");
                     for (int i = 0; i < ids.length; i++) {
                         onResponseReceived(i, (JSONArray) null);
                     }
@@ -529,7 +536,6 @@ public abstract class Utilities {
 
     public void findSummSpells(int id, String version, ImageView imageView) {
         setItemImage(id, imageView, version, false);
-        showLog("trying find summ spell in ver " + version);
     }
 
     public static String getItemImgUrl(int id, String version) {
@@ -577,9 +583,7 @@ public abstract class Utilities {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
             File file = new File(context.getExternalCacheDir(), name);
             bitmap = decodeSampledBitmap(file, MainActivity.screenDensity / 160 * dpSize, MainActivity.screenDensity / 160 * dpSize);
-
-            showLog("getting bmp from " + file.getAbsolutePath());
-        } else showLog("cant access SD");
+        }
         return bitmap;
     }
 
@@ -657,7 +661,7 @@ public abstract class Utilities {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    showLog("resolvig error of id " + id + " " + versionIndex + " nth");
+
                 }
             }
             error.printStackTrace();

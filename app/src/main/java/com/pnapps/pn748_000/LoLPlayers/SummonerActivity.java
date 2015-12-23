@@ -116,7 +116,6 @@ public class SummonerActivity extends AppCompatActivity implements MatchHistory.
 
     @Override
     public void onStatsReceived(JSONObject stats) {
-        Utilities.showLog("onStatsReceived");
         if(statisticsFragment!=null)statisticsFragment.showStats(stats);
     }
 

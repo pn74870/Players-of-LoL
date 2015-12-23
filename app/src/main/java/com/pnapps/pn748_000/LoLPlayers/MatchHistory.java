@@ -70,22 +70,22 @@ public class MatchHistory extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_ID = "id";
     private static final String ARG_REGION = "region";
-    private static final String STATE_LIST ="list" ;
+    private static final String STATE_LIST = "list";
 
-    RecyclerView recyclerView;
-    MyAdapter adapter;
+    private RecyclerView recyclerView;
+    private MyAdapter adapter;
 
-    ArrayList<MatchInfo> list;
+    private ArrayList<MatchInfo> list;
     // TODO: Rename and change types of parameters
 
 
     private OnFragmentInteractionListener mListener;
-    VolleySingleton volleySingleton;
-    RequestQueue requestQueue;
-    private   Utilities utilities;
+    private VolleySingleton volleySingleton;
+    private RequestQueue requestQueue;
+    private Utilities utilities;
     private int id;
     private String region;
-
+    private int lengthOfList;
 
     // TODO: Rename and change types and number of parameters
     public static MatchHistory newInstance(int id, String region) {
@@ -111,43 +111,50 @@ public class MatchHistory extends Fragment {
             region = getArguments().getString(ARG_REGION);
 
         }
-        Log.e("asd","onCreate match history");
+        Log.e("asd", "onCreate match history");
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getmRequestQueue();
-        adapter=new MyAdapter(getActivity());
+        adapter = new MyAdapter(getActivity());
 
-         utilities=new Utilities() {
+        utilities = new Utilities() {
+            int numberOfFinished=0;
             @Override
-            public void  onResponseReceived(int index,String champName) {
-                showLog("onResponseReceived "+champName);
-           processMatchData(index,champName);
+            public void onResponseReceived(int index, String champName) {
+                showLog("onResponseReceived " + champName);
+                numberOfFinished++;
+                list.get(index).champIcon = getChampImg(champName);
+                if (numberOfFinished==lengthOfList) {
+
+                    adapter.setData(list);
+                }
+
             }
 
 
+            @Override
+            public void onResponseReceived(int i, JSONArray array) {
 
-             @Override
-             public void onResponseReceived(int i,JSONArray array) {
-
-             }
-         };
+            }
+        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e("asd","onCreateView");
-       View view=inflater.inflate(R.layout.match_history,container,false);
-        recyclerView= (RecyclerView) view.findViewById(R.id.matchList);
+        Log.e("asd", "onCreateView");
+        View view = inflater.inflate(R.layout.match_history, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.matchList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         recyclerView.setAdapter(adapter);
-        if(savedInstanceState!=null) {
-            list=savedInstanceState.getParcelableArrayList(STATE_LIST);
-            region=savedInstanceState.getString(ARG_REGION);
+        if (savedInstanceState != null) {
+            list = savedInstanceState.getParcelableArrayList(STATE_LIST);
+            region = savedInstanceState.getString(ARG_REGION);
             adapter.setData(list);
+        } else {
+            list = new ArrayList<>();
+            refreshList();
         }
-        else {list= new ArrayList<>();
-refreshList();}
 
         return view;
     }
@@ -181,23 +188,25 @@ refreshList();}
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and nameTextView
-         void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
 
     public String getRequestUrl(int id, String region, int type, String champ) {
-                switch (type){
-                    case 1:return HTTP  + URL_START_GLOBAL + region + URL_CHAMPION + id + API_KEY;
-                    case 2:return DDRAGON +MainActivity.version+URL_CHAMP_ICON+ champ + PNG;
-                }
-                return HTTP + region + URL_START + region + URL_MATCH_HISTORY + id+RECENT + API_KEY;
+        switch (type) {
+            case 1:
+                return HTTP + URL_START_GLOBAL + region + URL_CHAMPION + id + API_KEY;
+            case 2:
+                return DDRAGON + MainActivity.version + URL_CHAMP_ICON + champ + PNG;
+        }
+        return HTTP + region + URL_START + region + URL_MATCH_HISTORY + id + RECENT + API_KEY;
 
     }
 
@@ -206,21 +215,23 @@ refreshList();}
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(STATE_LIST, list);
-        outState.putString(ARG_REGION,region);
+        outState.putString(ARG_REGION, region);
     }
 
-    public void refreshList(){
+    public void refreshList() {
 
-        if(list!=null){
-        list.clear();
-        adapter.notifyDataSetChanged();}
-        final JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET, getRequestUrl(id, region,0,""), (String) null, new Response.Listener<JSONObject>() {
+        if (list != null) {
+            list.clear();
+            adapter.notifyDataSetChanged();
+        }
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getRequestUrl(id, region, 0, ""), (String) null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    final JSONArray array=response.getJSONArray("games");
-                    for (int i=0; i<array.length(); i++) list.add(null);
-                    for(int i=0; i<array.length(); i++) {
+                    final JSONArray array = response.getJSONArray("games");
+                    lengthOfList=array.length();
+                    for (int i = 0; i < array.length(); i++) list.add(null);
+                    for (int i = 0; i < array.length(); i++) {
                         final int in = i;
 
                         final JSONObject stats = array.getJSONObject(i).getJSONObject("stats");
@@ -233,32 +244,33 @@ refreshList();}
                         final long date = array.getJSONObject(i).getLong("createDate");
                         Log.e("asd", "date is " + date);
 
-                        requestJsonObject(HTTP + URL_START_GLOBAL  + URL_SUMMONER_SPELLS + API_KEY_AND, new Response.Listener<JSONObject>() {
+                        requestJsonObject(HTTP + URL_START_GLOBAL + URL_SUMMONER_SPELLS + API_KEY_AND, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 showLog("summoner spells were received");
-                                JSONObject spells=getJsonObjectFromJson(response,"data");
-                                String spellName1=""+spell1 ;
-                                String spellName2 =""+spell2;
+                                JSONObject spells = getJsonObjectFromJson(response, "data");
+                                String spellName1 = "" + spell1;
+                                String spellName2 = "" + spell2;
 
-                                if(spells!=null) {
-                                    if(spells.has(spell1+""))
-                                     spellName1 = getStringFromJson(getJsonObjectFromJson(spells, spell1 + ""), "key");
-                                    if(spells.has(spell2+""))
-                                     spellName2 = getStringFromJson(getJsonObjectFromJson(spells, spell2 + ""), "key");
+                                if (spells != null) {
+                                    if (spells.has(spell1 + ""))
+                                        spellName1 = getStringFromJson(getJsonObjectFromJson(spells, spell1 + ""), "key");
+                                    if (spells.has(spell2 + ""))
+                                        spellName2 = getStringFromJson(getJsonObjectFromJson(spells, spell2 + ""), "key");
                                 }
-                                int [] items={0,0,0,0,0,0};
-                                for(int i=0; i<6; i++) {
+                                int[] items = {0, 0, 0, 0, 0, 0};
+                                for (int i = 0; i < 6; i++) {
 
-                                    if(stats.has("item"+i))  items[i]=getIntFromJson(stats, "item" + i);
+                                    if (stats.has("item" + i))
+                                        items[i] = getIntFromJson(stats, "item" + i);
 
                                 }
-                                MatchInfo matchInfo=new MatchInfo(stat(stats,"championsKilled"),stat(stats, "assists"),stat(stats,"numDeaths"),
-                                        stat(stats,"minionsKilled")+stat(stats,"neutralMinionsKilled"),getIntFromJson(stats,"goldEarned"),
-                                        "",champ,getBooleanFromJson(stats,"win"),
-                                        matchType(type, subtype, mode, -1),spellName1,
-                                        spellName2,items,date,getIntFromJson(stats, "timePlayed"),in);
-                                list.set(in,matchInfo);
+                                MatchInfo matchInfo = new MatchInfo(stat(stats, "championsKilled"), stat(stats, "assists"), stat(stats, "numDeaths"),
+                                        stat(stats, "minionsKilled") + stat(stats, "neutralMinionsKilled"), getIntFromJson(stats, "goldEarned"),
+                                        "", champ, getBooleanFromJson(stats, "win"),
+                                        matchType(type, subtype, mode, -1), spellName1,
+                                        spellName2, items, date, getIntFromJson(stats, "timePlayed"), in);
+                                list.set(in, matchInfo);
                                 utilities.champNameFromId(in, MyApplication.getAppContext(), champ, region);
 
                             }
@@ -266,7 +278,7 @@ refreshList();}
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 error.printStackTrace();
-                                }
+                            }
                         });
 
                         //creating arguments
@@ -303,42 +315,42 @@ refreshList();}
 
                     }
                     else processMatchData(spell1,spell2,stats,in,champName,champ,type,subtype,mode,date); }*/
-                    }} catch (JSONException e) {
+                    }
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
         requestQueue.add(request);
 
 
-
     }
 
 
-    void processMatchData(int in,String champName){
+    void processMatchData(int in, String champName) {
         showLog("processMatchData");
 
-             list.get(in).champIcon=getChampImg(champName);
+        list.get(in).champIcon = getChampImg(champName);
 
 
+        boolean noNull = true;
+        for (int j = 0; j < list.size(); j++) {
+            if (list.get(j) == null) noNull = false;
+        }
+        if (noNull) {
 
-                    boolean noNull=true;
-                    for(int j=0; j<list.size();j++){
-                        if(list.get(j)==null) noNull=false;
-                    }
-                    if(noNull){
-
-                        adapter.setData(list);
-                    }
+            adapter.setData(list);
+        }
 
 
-                }
+    }
+
     class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         ArrayList<MatchInfo> data = new ArrayList<>();
         LayoutInflater inflater;
@@ -395,8 +407,8 @@ refreshList();}
                     }
                 });
 
-                getSpellImg(current.spell1,holder.spell1Img);
-                getSpellImg(current.spell2,holder.spell2Img);
+                getSpellImg(current.spell1, holder.spell1Img);
+                getSpellImg(current.spell2, holder.spell2Img);
 
 
                 int[] items = current.items;
@@ -414,8 +426,8 @@ refreshList();}
 
                             }
                         };
-                        utilities.setItemImage(items[i], holder.items[i], MainActivity.version,true);
-                      //  Picasso.with(getActivity()).load(getItemImgUrl(items[i],MainActivity.version)).into(holder.items[i]);
+                        utilities.setItemImage(items[i], holder.items[i], MainActivity.version, true);
+                        //  Picasso.with(getActivity()).load(getItemImgUrl(items[i],MainActivity.version)).into(holder.items[i]);
                     } else {
                         holder.items[i].setImageDrawable(null);
                         if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN)
@@ -469,11 +481,11 @@ refreshList();}
             notifyDataSetChanged();
         }
 
-        private void getSpellImg(String spell, final ImageView imageView){
-            if(spell!=null){
-                if(!NumberUtils.isNumber(spell))
-                   // Picasso.with(getActivity()).load(DDRAGON+MainActivity.version+DDRAGON_SPELL_IMG+spell+PNG).into(imageView);
-                     imageLoader.get(DDRAGON+MainActivity.version+DDRAGON_SPELL_IMG+spell+PNG, new ImageLoader.ImageListener() {
+        private void getSpellImg(String spell, final ImageView imageView) {
+            if (spell != null) {
+                if (!NumberUtils.isNumber(spell))
+                    // Picasso.with(getActivity()).load(DDRAGON+MainActivity.version+DDRAGON_SPELL_IMG+spell+PNG).into(imageView);
+                    imageLoader.get(DDRAGON + MainActivity.version + DDRAGON_SPELL_IMG + spell + PNG, new ImageLoader.ImageListener() {
                         @Override
                         public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                             imageView.setImageBitmap(response.getBitmap());
@@ -485,7 +497,7 @@ refreshList();}
                         }
                     });
                 else {
-                    Utilities utilities= new Utilities(Integer.valueOf(spell), imageView, MainActivity.versions) {
+                    Utilities utilities = new Utilities(Integer.valueOf(spell), imageView, MainActivity.versions) {
                         @Override
                         public void onResponseReceived(int index, String champName) {
 
@@ -497,13 +509,14 @@ refreshList();}
                         }
                     };
                     try {
-                        utilities.findSummSpells(Integer.valueOf(spell),MainActivity.versions.getString(3),imageView);
+                        utilities.findSummSpells(Integer.valueOf(spell), MainActivity.versions.getString(3), imageView);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                 }
-            }}
+            }
+        }
 
     }
 

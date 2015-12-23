@@ -38,6 +38,8 @@ import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonObjectFromJson;
 import static com.pnapps.pn748_000.LoLPlayers.Utilities.getStatsUrl;
 import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
 import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
+import static com.pnapps.pn748_000.LoLPlayers.Utilities.showToast;
+
 
 /**
  * Created by pn748_000 on 11/25/2015.
@@ -93,11 +95,12 @@ public class ChampionsFragment extends Fragment {
             region = args.getString(ARG_REGION);
         }
         utilities = new Utilities() {
+            int numberOfFinished=0;
             @Override
             public void onResponseReceived(int index, String champName) {
+                numberOfFinished++;
                 statsList.get(index).champ = champName;
-                showLog("getting champ name " + index);
-                if (index + 2 == length) {
+                if (numberOfFinished == length-1) {
                     adapter.setData(statsList);
                     noRankedText.setVisibility(View.GONE);
                 }
@@ -138,7 +141,7 @@ public class ChampionsFragment extends Fragment {
     }
 
     public void getChampsList() {
-        showLog("getChampsList was called");
+
         requestJsonObject(getStatsUrl(id, region), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -146,19 +149,20 @@ public class ChampionsFragment extends Fragment {
 
                 if (champions != null) {
                     length = champions.length();
-                    showLog("the length of list is " + length);
+
                     for (int i = 0; i < length; i++) {
                         try {
 
                             JSONObject champ = champions.getJSONObject(i);
                             if (champ != null) {
-
-                                if (champ.getInt("id") != 0) {//zero id is used for general stats by rito
+                                int champId=champ.getInt("id");
+                                if (champId != 0) {//zero id is used for general stats by rito
                                     JSONObject champStats = getJsonObjectFromJson(champ, "stats");
                                     if (champStats != null)
                                         statsList.add(new ChampionStats(champStats.getInt("totalChampionKills"), champStats.getInt("totalDeathsPerSession"), champStats.getInt("totalAssists"), champStats.getInt("totalMinionKills"),
                                                 champStats.getInt("totalSessionsLost"), champStats.getInt("totalSessionsWon")));
-                                    utilities.champNameFromId(statsList.size() - 1, MyApplication.getAppContext(), champ.getInt("id"), region);
+                                    final int index=statsList.size() - 1;
+                                    utilities.champNameFromId(index, MyApplication.getAppContext(), champId, region);
 
                                 } else listener.onStatsReceived(champ);
                             }
@@ -243,6 +247,7 @@ public class ChampionsFragment extends Fragment {
     class ChampionListViewHolder extends RecyclerView.ViewHolder {
         ImageView champIcon;
         TextView kda, winsLoses, ratio, creeps;
+        String name;
 
         public ChampionListViewHolder(View itemView) {
             super(itemView);
@@ -251,6 +256,12 @@ public class ChampionsFragment extends Fragment {
             winsLoses = (TextView) itemView.findViewById(R.id.wl_number);
             ratio = (TextView) itemView.findViewById(R.id.ratio_number);
             creeps = (TextView) itemView.findViewById(R.id.cs_number);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showToast(name,getActivity());
+                }
+            });
         }
     }
 
@@ -283,6 +294,7 @@ public class ChampionsFragment extends Fragment {
             holder.kda.setText(String.format("%s/%s/%s", formatStringOneAfterDec(calculateAverage(stats.kills, stats.games)),
                     formatStringOneAfterDec(calculateAverage(stats.deaths, stats.games)),
                     formatStringOneAfterDec(calculateAverage(stats.assists, stats.games))));
+            holder.name=stats.champ;
             getImage(getChampImg(stats.champ), new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
@@ -290,7 +302,7 @@ public class ChampionsFragment extends Fragment {
                     holder.champIcon.setImageBitmap(bitmap);
 
                     if (position < 4)
-                        listener.onListCompleted(position, bitmap, stats.games);
+                        if(listener!=null)listener.onListCompleted(position, bitmap, stats.games);
                 }
 
                 @Override
