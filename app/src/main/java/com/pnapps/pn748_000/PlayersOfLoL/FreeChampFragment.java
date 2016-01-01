@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,15 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_REGION;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.JPG0;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMPION;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMP_LOADING;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_FREE_CHAMPS;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_REGION;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.HTTP;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.JPG0;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_CHAMPION;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_CHAMP_LOADING;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_FREE_CHAMPS;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_START_GLOBAL;
 //import static com.example.pn748_000.lolinfo.Keys.VERSION;
 
 import com.android.volley.NetworkError;
@@ -30,9 +30,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getImage;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.showToast;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getImage;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.requestJsonObject;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.showToast;
 
 
 /**

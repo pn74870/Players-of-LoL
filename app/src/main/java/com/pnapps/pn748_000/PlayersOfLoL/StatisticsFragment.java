@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -22,8 +23,10 @@ public class StatisticsFragment extends Fragment {
     private static final String ARG_STATS = "statsJson";//TODO might need to delete
     private static final String STATE_STATS = "stateStats";
     private TableLayout table;
-    private TextView pentas,quadras,triples,doubles,kills,killingSprees,mostKills,largestSpree,assists,gold,turrets,title;
+    private TextView pentas, quadras, triples, doubles, kills, killingSprees, mostKills, largestSpree, assists, gold, turrets, title;
+    private ProgressBar loadingBar;
     private JSONObject stats;
+
     public StatisticsFragment() {
     }
 
@@ -34,10 +37,15 @@ public class StatisticsFragment extends Fragment {
         fragment.setArguments(args);*/
         return new StatisticsFragment();
     }
-    public void showStats(JSONObject stats){
-        JSONObject statsObject=Utilities.getJsonObjectFromJson(stats,"stats");
+    protected void closeLoadingSpinner(){
+        loadingBar.setVisibility(View.GONE);
+        title.setVisibility(View.VISIBLE);
+    }
+    public void showStats(JSONObject stats) {
+
+        JSONObject statsObject = Utilities.getJsonObjectFromJson(stats, "stats");
         if (statsObject != null) {
-            this.stats=stats;
+            this.stats = stats;
 
             pentas.setText(statsObject.optInt("totalPentaKills") + "");
             quadras.setText(statsObject.optInt("totalQuadraKills") + "");
@@ -48,12 +56,15 @@ public class StatisticsFragment extends Fragment {
             assists.setText(statsObject.optInt("totalAssists") + "");
             gold.setText(NumberFormat.getInstance(Locale.US).format(statsObject.optInt("totalGoldEarned")));
             turrets.setText(statsObject.optInt("totalTurretsKilled") + "");
-            largestSpree.setText(statsObject.optInt("maxLargestKillingSpree")+"");
-            killingSprees.setText(statsObject.optInt("killingSpree")+"");
+            largestSpree.setText(statsObject.optInt("maxLargestKillingSpree") + "");
+            killingSprees.setText(statsObject.optInt("killingSpree") + "");
             table.setVisibility(View.VISIBLE);
             title.setText(getString(R.string.ranked_stats));
         }
+        title.setVisibility(View.VISIBLE);
+        loadingBar.setVisibility(View.GONE);
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,33 +77,34 @@ public class StatisticsFragment extends Fragment {
                 e.printStackTrace();
             }
         }*/
-         pentas = (TextView) view.findViewById(R.id.penta_number);
-         quadras = (TextView) view.findViewById(R.id.quadra_number);
-         triples = (TextView) view.findViewById(R.id.triple_number);
-         doubles = (TextView) view.findViewById(R.id.double_number);
-         kills = (TextView) view.findViewById(R.id.kills_number);
-         assists = (TextView) view.findViewById(R.id.assists_number);
-         mostKills = (TextView) view.findViewById(R.id.most_kills_number);
-         gold = (TextView) view.findViewById(R.id.gold_number);
-         turrets = (TextView) view.findViewById(R.id.turrets_number);
-         killingSprees = (TextView) view.findViewById(R.id.killing_sprees_number);
-         largestSpree = (TextView) view.findViewById(R.id.largest_killing_spree_number);
-         table= (TableLayout) view.findViewById(R.id.stats_table);
-         title= (TextView) view.findViewById(R.id.stats_title);
-        if(savedInstanceState!=null) {
+        loadingBar = (ProgressBar) view.findViewById(R.id.progressSpinner);
+        pentas = (TextView) view.findViewById(R.id.penta_number);
+        quadras = (TextView) view.findViewById(R.id.quadra_number);
+        triples = (TextView) view.findViewById(R.id.triple_number);
+        doubles = (TextView) view.findViewById(R.id.double_number);
+        kills = (TextView) view.findViewById(R.id.kills_number);
+        assists = (TextView) view.findViewById(R.id.assists_number);
+        mostKills = (TextView) view.findViewById(R.id.most_kills_number);
+        gold = (TextView) view.findViewById(R.id.gold_number);
+        turrets = (TextView) view.findViewById(R.id.turrets_number);
+        killingSprees = (TextView) view.findViewById(R.id.killing_sprees_number);
+        largestSpree = (TextView) view.findViewById(R.id.largest_killing_spree_number);
+        table = (TableLayout) view.findViewById(R.id.stats_table);
+        title = (TextView) view.findViewById(R.id.stats_title);
+        if (savedInstanceState != null) {
             try {
-                stats=new JSONObject(savedInstanceState.getString(STATE_STATS));
+                stats = new JSONObject(savedInstanceState.getString(STATE_STATS));
                 showStats(stats);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         return view;
-        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (stats!=null)outState.putString(STATE_STATS,stats.toString());
+        if (stats != null) outState.putString(STATE_STATS, stats.toString());
     }
 }

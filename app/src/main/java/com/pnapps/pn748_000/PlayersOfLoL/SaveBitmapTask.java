@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.content.Context;
 import android.graphics.Bitmap;

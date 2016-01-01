@@ -1,11 +1,10 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -28,17 +28,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.calculateAverage;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.formatDouble;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.formatStringOneAfterDec;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getChampImg;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getImage;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonArrayFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonObjectFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getStatsUrl;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.showToast;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.calculateAverage;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.formatDouble;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.formatStringOneAfterDec;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getChampImg;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getImage;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getJsonArrayFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getJsonObjectFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getStatsUrl;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.requestJsonObject;
 
 
 /**
@@ -49,7 +47,6 @@ public class ChampionsFragment extends Fragment {
     private static final String ARG_REGION = "argumentRegion";
     private static final String STATE_LIST = "stateOfList";
     private int id;
-    private RecyclerView recyclerView;
     private String region;
     private Utilities utilities;
     private ArrayList<ChampionStats> statsList = new ArrayList<>();
@@ -57,10 +54,11 @@ public class ChampionsFragment extends Fragment {
     private ChampionListAdapter adapter;
     private TextView noRankedText;
     private StatsListener listener;
+    private ProgressBar loadingBar;
 
     interface StatsListener {
         void onStatsReceived(JSONObject stats);
-
+        void noRankedGamesFound();
         void onListCompleted(int index, Bitmap bitmap, int games);
     }
 
@@ -95,14 +93,14 @@ public class ChampionsFragment extends Fragment {
             region = args.getString(ARG_REGION);
         }
         utilities = new Utilities() {
-            int numberOfFinished=0;
+            int numberOfFinished = 0;
+
             @Override
             public void onResponseReceived(int index, String champName) {
                 numberOfFinished++;
                 statsList.get(index).champ = champName;
-                if (numberOfFinished == length-1) {
+                if (numberOfFinished == length - 1) {
                     adapter.setData(statsList);
-                    noRankedText.setVisibility(View.GONE);
                 }
             }
 
@@ -124,7 +122,8 @@ public class ChampionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.champions_fragment, container, false);
         noRankedText = (TextView) view.findViewById(R.id.noRankedTxt);
-        recyclerView = (RecyclerView) view.findViewById(R.id.championsRecycler);
+        loadingBar = (ProgressBar) view.findViewById(R.id.progressSpinner);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.championsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getAppContext()));
         recyclerView.setAdapter(adapter);
         if (savedInstanceState != null)
@@ -146,7 +145,6 @@ public class ChampionsFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 JSONArray champions = getJsonArrayFromJson(response, "champions");
-
                 if (champions != null) {
                     length = champions.length();
 
@@ -155,13 +153,14 @@ public class ChampionsFragment extends Fragment {
 
                             JSONObject champ = champions.getJSONObject(i);
                             if (champ != null) {
-                                int champId=champ.getInt("id");
+                                int champId = champ.getInt("id");
                                 if (champId != 0) {//zero id is used for general stats by rito
                                     JSONObject champStats = getJsonObjectFromJson(champ, "stats");
                                     if (champStats != null)
-                                        statsList.add(new ChampionStats(champStats.getInt("totalChampionKills"), champStats.getInt("totalDeathsPerSession"), champStats.getInt("totalAssists"), champStats.getInt("totalMinionKills"),
+                                        statsList.add(new ChampionStats(champStats.getInt("totalChampionKills"),
+                                                champStats.getInt("totalDeathsPerSession"), champStats.getInt("totalAssists"), champStats.getInt("totalMinionKills"),
                                                 champStats.getInt("totalSessionsLost"), champStats.getInt("totalSessionsWon")));
-                                    final int index=statsList.size() - 1;
+                                    final int index = statsList.size() - 1;
                                     utilities.champNameFromId(index, MyApplication.getAppContext(), champId, region);
 
                                 } else listener.onStatsReceived(champ);
@@ -172,12 +171,15 @@ public class ChampionsFragment extends Fragment {
                         }
                     }
 
-                }
+                } else noRankedText.setVisibility(View.VISIBLE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                listener.noRankedGamesFound();
+                noRankedText.setVisibility(View.VISIBLE);
+                loadingBar.setVisibility(View.GONE);
             }
         });
 
@@ -192,7 +194,6 @@ public class ChampionsFragment extends Fragment {
             this.cs = cs;
             this.deaths = deaths;
             this.kills = kills;
-
             this.loses = loses;
             this.wins = wins;
             games = wins + loses;
@@ -256,12 +257,6 @@ public class ChampionsFragment extends Fragment {
             winsLoses = (TextView) itemView.findViewById(R.id.wl_number);
             ratio = (TextView) itemView.findViewById(R.id.ratio_number);
             creeps = (TextView) itemView.findViewById(R.id.cs_number);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showToast(name,getActivity());
-                }
-            });
         }
     }
 
@@ -277,6 +272,7 @@ public class ChampionsFragment extends Fragment {
                 }
             });
             notifyDataSetChanged();
+            loadingBar.setVisibility(View.GONE);
         }
 
         @Override
@@ -294,7 +290,7 @@ public class ChampionsFragment extends Fragment {
             holder.kda.setText(String.format("%s/%s/%s", formatStringOneAfterDec(calculateAverage(stats.kills, stats.games)),
                     formatStringOneAfterDec(calculateAverage(stats.deaths, stats.games)),
                     formatStringOneAfterDec(calculateAverage(stats.assists, stats.games))));
-            holder.name=stats.champ;
+            holder.name = stats.champ;
             getImage(getChampImg(stats.champ), new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
@@ -302,7 +298,8 @@ public class ChampionsFragment extends Fragment {
                     holder.champIcon.setImageBitmap(bitmap);
 
                     if (position < 4)
-                        if(listener!=null)listener.onListCompleted(position, bitmap, stats.games);
+                        if (listener != null)
+                            listener.onListCompleted(position, bitmap, stats.games);
                 }
 
                 @Override

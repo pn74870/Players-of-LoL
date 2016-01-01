@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 
 public class Champ {

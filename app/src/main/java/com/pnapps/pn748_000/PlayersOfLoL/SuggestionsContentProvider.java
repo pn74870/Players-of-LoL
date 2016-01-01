@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;
@@ -40,7 +40,6 @@ public class SuggestionsContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Utilities.showLog("provider query is called "+uri+" "+selection);
         String order=sortOrder;
         switch (uriMatcher.match(uri)){
             case 1:

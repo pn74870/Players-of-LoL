@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
@@ -15,7 +15,7 @@ import android.view.MenuItem;
 
 import org.json.JSONObject;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_SUMMONER_OBJECT;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_SUMMONER_OBJECT;
 
 /**
  * Created by pn748_000 on 11/15/2015.
@@ -117,6 +117,11 @@ public class SummonerActivity extends AppCompatActivity implements MatchHistory.
     @Override
     public void onStatsReceived(JSONObject stats) {
         if(statisticsFragment!=null)statisticsFragment.showStats(stats);
+    }
+
+    @Override
+    public void noRankedGamesFound() {
+        if(statisticsFragment!=null) statisticsFragment.closeLoadingSpinner();
     }
 
     @Override

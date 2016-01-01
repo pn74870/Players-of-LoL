@@ -1,20 +1,20 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,30 +32,29 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY_AND;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY_AND;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.DDRAGON;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.DDRAGON_SPELL_IMG;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.PNG;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.RECENT;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMPION;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMP_ICON;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_MATCH_HISTORY;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_SUMMONER_SPELLS;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getBooleanFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getChampImg;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getIntFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonObjectFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getStringFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.matchType;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.stat;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON_SPELL_IMG;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.HTTP;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.PNG;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.RECENT;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_CHAMPION;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_CHAMP_ICON;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_MATCH_HISTORY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_START;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_SUMMONER_SPELLS;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getBooleanFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getChampImg;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getIntFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getJsonObjectFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getStringFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.matchType;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.stat;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.requestJsonObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,7 +76,7 @@ public class MatchHistory extends Fragment {
 
     private ArrayList<MatchInfo> list;
     // TODO: Rename and change types of parameters
-
+    private ProgressBar loadingBar;
 
     private OnFragmentInteractionListener mListener;
     private VolleySingleton volleySingleton;
@@ -111,7 +110,7 @@ public class MatchHistory extends Fragment {
             region = getArguments().getString(ARG_REGION);
 
         }
-        Log.e("asd", "onCreate match history");
+
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getmRequestQueue();
         adapter = new MyAdapter(getActivity());
@@ -120,7 +119,6 @@ public class MatchHistory extends Fragment {
             int numberOfFinished=0;
             @Override
             public void onResponseReceived(int index, String champName) {
-                showLog("onResponseReceived " + champName);
                 numberOfFinished++;
                 list.get(index).champIcon = getChampImg(champName);
                 if (numberOfFinished==lengthOfList) {
@@ -141,12 +139,12 @@ public class MatchHistory extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e("asd", "onCreateView");
+
         View view = inflater.inflate(R.layout.match_history, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.matchList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         recyclerView.setAdapter(adapter);
+        loadingBar= (ProgressBar) view.findViewById(R.id.progressSpinner);
         if (savedInstanceState != null) {
             list = savedInstanceState.getParcelableArrayList(STATE_LIST);
             region = savedInstanceState.getString(ARG_REGION);
@@ -242,12 +240,11 @@ public class MatchHistory extends Fragment {
                         final int spell1 = array.getJSONObject(i).getInt("spell1");
                         final int spell2 = array.getJSONObject(i).getInt("spell2");
                         final long date = array.getJSONObject(i).getLong("createDate");
-                        Log.e("asd", "date is " + date);
+
 
                         requestJsonObject(HTTP + URL_START_GLOBAL + URL_SUMMONER_SPELLS + API_KEY_AND, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                showLog("summoner spells were received");
                                 JSONObject spells = getJsonObjectFromJson(response, "data");
                                 String spellName1 = "" + spell1;
                                 String spellName2 = "" + spell2;
@@ -297,7 +294,7 @@ public class MatchHistory extends Fragment {
                                    final String champion=response.getString("key");
                                     champIdPrefs.edit().putString(champ+"",champion).apply();
                                     processMatchData(spell1, spell2, stats, in, champion, champ, type,subtype,mode, date);
-                                    Log.e("asd","champion "+champion+" was cached");
+
 
 
 
@@ -323,7 +320,7 @@ public class MatchHistory extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         });
 
@@ -334,7 +331,6 @@ public class MatchHistory extends Fragment {
 
 
     void processMatchData(int in, String champName) {
-        showLog("processMatchData");
 
         list.get(in).champIcon = getChampImg(champName);
 
@@ -403,7 +399,7 @@ public class MatchHistory extends Fragment {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MyApplication.getAppContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
                     }
                 });
 
@@ -430,10 +426,10 @@ public class MatchHistory extends Fragment {
                         //  Picasso.with(getActivity()).load(getItemImgUrl(items[i],MainActivity.version)).into(holder.items[i]);
                     } else {
                         holder.items[i].setImageDrawable(null);
-                        if (Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN)
-                            holder.items[i].setBackgroundDrawable(MyApplication.getAppContext().getResources().getDrawable(R.drawable.border));
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+                            holder.items[i].setBackgroundDrawable(ContextCompat.getDrawable(MyApplication.getAppContext(),R.drawable.border));
                         else
-                            holder.items[i].setBackground(MyApplication.getAppContext().getDrawable(R.drawable.border));
+                            holder.items[i].setBackground(ContextCompat.getDrawable(MyApplication.getAppContext(), R.drawable.border));
                     }
                 }
             }
@@ -479,6 +475,7 @@ public class MatchHistory extends Fragment {
             data = list;
             notifyItemRangeChanged(0, list.size());
             notifyDataSetChanged();
+            loadingBar.setVisibility(View.GONE);
         }
 
         private void getSpellImg(String spell, final ImageView imageView) {

@@ -1,7 +1,6 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -15,13 +14,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,34 +35,31 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY_AND;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_PARTICIPANTS;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_REGION;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.MASTERY_TREE;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON_ID;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY_AND;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_PARTICIPANTS;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_REGION;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.HTTP;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.MASTERY_TREE;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.PROFILE_ICON_ID;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_MASTERY;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_RUNE;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.createSummonerObject;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getChampImg;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getImage;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonArrayFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonObjectFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getSummonerUrl;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.startSummonerActivity;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_MASTERY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_RUNE;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.createSummonerObject;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getChampImg;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getImage;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getJsonArrayFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getJsonObjectFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getSummonerUrl;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.requestJsonObject;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.startSummonerActivity;
 
 /**
  * Created by pn748_000 on 11/27/2015.
  */
 public class ActiveMatchActivity extends AppCompatActivity {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final int BLUE_TEAM_ID = -100;
     private static final int PURPLE_TEAM_ID = -200;
     private static final String PLAYER_LIST_STATE = "playersState";
@@ -75,20 +74,20 @@ public class ActiveMatchActivity extends AppCompatActivity {
     private ImageView[] bansChampBlue = new ImageView[3];
     private ImageView[] bansChampPurple = new ImageView[3];
 
-    // TODO: Rename and change types of parameters
-    private String region, platformID;
 
+    private String region, platformID;
+    private ProgressBar loadingBar;
     private TextView gameStart;
     private View panel;
     private LinearLayout blueLayout, purpleLayout, tButtonPanel;
     private Utilities utilities;
     private ArrayList<Player> playersList;
-    // private  ScrollView scrollView;
+    private ScrollView parentLayout;
     private int[] ids;
     private JSONObject activeMatchJson;
     private boolean champsReceived = false, bansReceived = false, settingData = false;
     private int numbOfCompletedRunes, numbOfBans, numbOfCompletedMasteries;
-
+    private int lengthOfList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +113,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
         } else finish();
         playersList = new ArrayList<>();
         utilities = new Utilities() {
+            private int numberOfChampsReceived=0;
             @Override
             public void onResponseReceived(int index, String champName) {
                 if (index == BLUE_TEAM_ID) {
@@ -139,13 +139,16 @@ public class ActiveMatchActivity extends AppCompatActivity {
             public void onResponseReceived(int index, JSONArray array) {
 
                 try {
+                    numberOfChampsReceived++;
+                    champsReceived=lengthOfList==numberOfChampsReceived;
                     onArrayReceived(array, index);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         };
-
+        loadingBar= (ProgressBar) findViewById(R.id.progressSpinner);
+        parentLayout= (ScrollView) findViewById(R.id.scrollView);
         gameStart = (TextView) findViewById(R.id.gameStart);
         // scrollView= (ScrollView) findViewById(R.id.scrollView);
         purpleLayout = (LinearLayout) findViewById(R.id.purpleContainer);
@@ -212,8 +215,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
 
 
         JSONArray participants = getJsonArrayFromJson(activeMatchObject, "participants");
-
-
         JSONArray bannedChamps = getJsonArrayFromJson(activeMatchObject, "bannedChampions");
         if (bannedChamps != null) {
             numbOfBans = bannedChamps.length();
@@ -246,7 +247,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             ids = new int[participants.length()];
-
+            lengthOfList=participants.length();
             for (int i = 0; i < participants.length(); i++) {
                 try {
 
@@ -299,7 +300,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
                     playersList.add(playerObj);
                     utilities.champNameFromId(i, MyApplication.getAppContext(), champID, region);
 
-                    //TODO runes and masteries
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -310,9 +311,8 @@ public class ActiveMatchActivity extends AppCompatActivity {
 
         }
     }
-
+//TODO fix
     void champNameReceived(final String name, final int index) {
-        showLog("champ name received");
         playersList.get(index).champ = name;
         if (index == ids.length - 1) utilities.getLeagueEntry(ids, region);
 
@@ -334,7 +334,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
         KeyAndValue[] array = new KeyAndValue[values.length];
 
         for (int i = 0; i < values.length; i++) {
-            showLog("new string " + values[i]);
             if (!values[i].isEmpty()) {
                 String[] tempArray = values[i].split(" ", 2);
 
@@ -355,12 +354,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
 
     private AlertDialog createDialog(LinkedHashMap<String, Double> map, String title) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle(title).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //TODO try null listener
-            }
-        });
+        dialogBuilder.setTitle(title).setPositiveButton("OK", null);
         StringBuilder buffer = new StringBuilder();
         for (Map.Entry<String, Double> entry : map.entrySet()) {
             String sign = entry.getValue() > 0 ? "+" : "";
@@ -479,13 +473,11 @@ public class ActiveMatchActivity extends AppCompatActivity {
             }
         }
 
-        if (in + 1 == playersList.size()) {
-            champsReceived = true;
-
+        if (champsReceived) {
             setData();
         }
     }
-
+//TODO fix champs problem
     private void setData() {
         if (champsReceived && bansReceived) {
             settingData = true;
@@ -527,7 +519,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (player.unranked) {
-                            requestJsonObject(getSummonerUrl(region, player.name.toLowerCase()), new Response.Listener<JSONObject>() {
+                            requestJsonObject(getSummonerUrl(region, StringEscapeUtils.escapeHtml4(player.name.toLowerCase())), new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     startSummonerActivity(createSummonerObject(getJsonObjectFromJson(response, player.name.toLowerCase()), region), ActiveMatchActivity.this);
@@ -627,6 +619,8 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 });
             }
         }
+        loadingBar.setVisibility(View.GONE);
+        parentLayout.setVisibility(View.VISIBLE);
     }
 
 

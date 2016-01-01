@@ -14,4 +14,5 @@
     <color name="blueTeamColor">#49C4F7</color>
     <color name="purpleTeamColor">#996DCA</color>
     <color name="darkGrey">#212121</color>
+    <color name="blueProgress">#508FF0</color>
 </resources>

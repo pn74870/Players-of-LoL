@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pnapps.pn748_000.LoLPlayers.BlankFragment">
+    tools:context="com.pnapps.pn748_000.PlayersOfLoL.BlankFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -90,7 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/most_played"
-                    android:id="@+id/most_played_txt"/>
+                    android:id="@+id/most_played_txt"
+                    android:visibility="gone"/>
                 <GridLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

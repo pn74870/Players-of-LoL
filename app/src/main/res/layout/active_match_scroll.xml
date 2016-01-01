@@ -12,10 +12,14 @@ android:background="?attr/colorPrimary"
 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:elevation="8dp"
     />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scrollView">
+    android:id="@+id/scrollView"
+    android:visibility="gone">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -144,4 +148,12 @@ android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
 
 
 </ScrollView>
+        <ProgressBar
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/progressSpinner"
+            android:indeterminateDrawable="@drawable/progress_spinner"/>
+    </FrameLayout>
 </LinearLayout>

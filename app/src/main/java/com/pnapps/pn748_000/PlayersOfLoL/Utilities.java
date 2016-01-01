@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,30 +30,30 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Locale;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_SUMMONER_OBJECT;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.DDRAGON;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.DDRAGON_SPELL_IMG;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.DDRAGON_SUMMONER_SPELLS;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ENTRY;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ID;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.LEVEL;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.NAME;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.PNG;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON_ID;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.RANKED;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_SUMMONER_OBJECT;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON_SPELL_IMG;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON_SUMMONER_SPELLS;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ENTRY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.HTTP;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ID;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.LEVEL;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.NAME;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.PNG;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.PROFILE_ICON_ID;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.RANKED;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_BY_NAME;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMPION;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_CHAMP_ICON;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_ITEMS;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_LEAGUE_BY_ID;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_SUMMONER_ICON;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_SUMMONER_STATS;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_VERSION;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_BY_NAME;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_CHAMPION;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_CHAMP_ICON;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_ITEMS;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_LEAGUE_BY_ID;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_START;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_SUMMONER_ICON;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_SUMMONER_STATS;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_VERSION;
 
 /**
  * Created by pn748_000 on 10/17/2015.
@@ -308,8 +308,6 @@ public abstract class Utilities {
 
                         String champion = response.getString("key");
                         champIdPrefs.edit().putString(champId + "", champion).apply();
-                        showLog("utils respons "+index+" "+champId);
-
                         onResponseReceived(index, champion);//}
 
 

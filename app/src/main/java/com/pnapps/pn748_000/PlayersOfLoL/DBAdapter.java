@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.app.SearchManager;
 import android.content.ContentValues;
@@ -12,7 +12,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -27,7 +26,6 @@ public class DBAdapter {
         dbHelper=new DBHelper(context);
     }
     public long insertData(String name,String region,int iconId,int id){
-        Utilities.showLog("inserting data to db " + name + " " + region);
         SQLiteDatabase db=dbHelper.getWritableDatabase();
        if(DatabaseUtils.queryNumEntries(db,DBHelper.TABLE_NAME)>= MAX_NUMBER_OF_ROWS){
             deleteTheLastRow();
@@ -44,7 +42,6 @@ public class DBAdapter {
         SQLiteQueryBuilder builder=new SQLiteQueryBuilder();
         builder.setTables(DBHelper.TABLE_NAME);
         builder.setProjectionMap(map);
-        Utilities.showLog("getting data from DB " + selection + " " + Arrays.toString(selectionArgs));
         if(selectionArgs!=null) selectionArgs[0] = "%"+selectionArgs[0] + "%";
         SQLiteDatabase db=dbHelper.getReadableDatabase();
         String[] projection={DBHelper._ID,SearchManager.SUGGEST_COLUMN_TEXT_1,SearchManager.SUGGEST_COLUMN_TEXT_2,SearchManager.SUGGEST_COLUMN_INTENT_DATA,SearchManager.SUGGEST_COLUMN_ICON_1};
@@ -61,7 +58,6 @@ public class DBAdapter {
         int iconColumn=cursor.getColumnIndex(DBHelper.ICON_RES);
         int regionColumn=cursor.getColumnIndex(DBHelper.REGION);
         while (cursor.moveToNext()){
-            Utilities.showLog(cursor.getString(nameColumn));
             summoners.add(new Summoner(cursor.getString(nameColumn),cursor.getInt(idColumn),cursor.getInt(iconColumn),0,cursor.getString(regionColumn)));
         }
         cursor.close();
@@ -121,13 +117,11 @@ public class DBAdapter {
 
       public DBHelper(Context context) {
           super(context, DATABASE_NAME,null, DATABASE_VERSION);
-          Utilities.showLog("DB constructor is called");
        }
 
 
        @Override
        public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            Utilities.showLog("creating DB");
            try {
                sqLiteDatabase.execSQL(CREATE_TABLE);
 
@@ -137,7 +131,6 @@ public class DBAdapter {
        }
        @Override
        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-           Utilities.showLog("upgr db from "+i+"to "+i1);
            try {
                sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
                onCreate(sqLiteDatabase);

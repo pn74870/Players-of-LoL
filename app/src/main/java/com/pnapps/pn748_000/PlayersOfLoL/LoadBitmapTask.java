@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,8 +10,8 @@ import com.android.volley.toolbox.ImageLoader;
 
 import java.lang.ref.WeakReference;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.PNG;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.PNG;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.PROFILE_ICON;
 
 /**
  * Created by pn748_000 on 11/21/2015.
@@ -38,14 +38,12 @@ public class LoadBitmapTask extends AsyncTask<Void,Void,Bitmap> {
         if(imageView!=null){
             if(bitmap!=null ){
                 imageView.get().setImageBitmap(bitmap);
-                Utilities.showLog("loaded image from sd");
             }
             else Utilities.getImage(Utilities.getProfilerIconUrl(id), new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                     Bitmap bitmap=response.getBitmap();
                     if(bitmap!=null){
-                        Utilities.showLog("getting image from net");
                         imageView.get().setImageBitmap(bitmap);
                         SaveBitmapTask task=new SaveBitmapTask(PROFILE_ICON+id+PNG,bitmap,context);
                         task.execute();

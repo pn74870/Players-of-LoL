@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -29,7 +29,7 @@ public class SummonerProfile extends Fragment {
 
 
     private OnSummonerProfileInteractionListener mListener;
-    private TextView nameTextView, levelTxt, regionTxt;
+    private TextView nameTextView, levelTxt, regionTxt,mostPlayedTxt;
     private ImageView profileIconImageView;
     private LinearLayout leagueLayout;
     private TextView[] ranks, lpTxts, wlTexts;
@@ -37,7 +37,6 @@ public class SummonerProfile extends Fragment {
     private ImageView[][] promos=new ImageView[3][];
     private Summoner summoner;
     private LinearLayout[] favChamps;
-
     public static SummonerProfile newInstance(Summoner summoner) {
         SummonerProfile fragment = new SummonerProfile();
         Bundle args = new Bundle();
@@ -54,8 +53,6 @@ public class SummonerProfile extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utilities.showLog("onCreate summ prof");
-
         if (getArguments() != null)
             summoner = getArguments().getParcelable(ARG_SUMMONER);
 
@@ -67,6 +64,7 @@ public class SummonerProfile extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.summoner_profile, container, false);
+        mostPlayedTxt= (TextView) view.findViewById(R.id.most_played_txt);
         favChamps=new LinearLayout[]{
                 (LinearLayout) view.findViewById(R.id.favouriteChamp1),
                 (LinearLayout) view.findViewById(R.id.favouriteChamp2),
@@ -139,6 +137,7 @@ public class SummonerProfile extends Fragment {
         return view;
     }
     protected void setFavouriteChamp(int champNumber, Bitmap champImg, int games){
+        if(mostPlayedTxt.getVisibility()==View.GONE)mostPlayedTxt.setVisibility(View.VISIBLE);
         ImageView imgView= (ImageView) favChamps[champNumber].findViewById(R.id.favouriteChampImg);
         imgView.setImageBitmap(champImg);
         TextView textView= (TextView) favChamps[champNumber].findViewById(R.id.favouriteChampTxt);
@@ -216,7 +215,6 @@ public class SummonerProfile extends Fragment {
 
             @Override
             public void onResponseReceived(int in, JSONArray array) {
-                showLog("league received");
                 int[] scores = {0, 0, 0};
                 int[] bestIndexes = {-1, -1, -1};
                 String[] queues = {"RANKED_TEAM_3x3", "RANKED_SOLO_5x5", "RANKED_TEAM_5x5"};
@@ -243,9 +241,6 @@ public class SummonerProfile extends Fragment {
 
                         if (bestIndexes[i] > -1) {
                             String tier = array.getJSONObject(bestIndexes[i]).getString("tier"), division = array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0).getString("division");
-
-                            showLog(tier + " " + division);
-
                             ranks[i].setText(tier + " " + division);
                             tierIcons[i].setImageResource(Utilities.getTierImage(tier, division));
                             JSONObject entry=array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0);

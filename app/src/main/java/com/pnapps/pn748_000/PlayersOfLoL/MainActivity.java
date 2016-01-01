@@ -1,4 +1,4 @@
-package com.pnapps.pn748_000.LoLPlayers;
+package com.pnapps.pn748_000.PlayersOfLoL;
 
 
 import android.graphics.Bitmap;
@@ -46,25 +46,24 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.pnapps.pn748_000.LoLPlayers.Keys.API_KEY;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_PARTICIPANTS;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ARG_REGION;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.HTTP;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.ID;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.PROFILE_ICON_ID;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_ACTIVE_MATCH;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_START_GLOBAL;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_VERSION;
-import static com.pnapps.pn748_000.LoLPlayers.Keys.URL_VERSION_LIST;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getIntFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getJsonObjectFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getPlatformID;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.getStringFromJson;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonArray;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.requestJsonObject;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.showLog;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.showToast;
-import static com.pnapps.pn748_000.LoLPlayers.Utilities.startSummonerActivity;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_PARTICIPANTS;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_REGION;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.HTTP;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ID;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.PROFILE_ICON_ID;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_ACTIVE_MATCH;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_VERSION;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_VERSION_LIST;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getIntFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getJsonObjectFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getPlatformID;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getStringFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.requestJsonArray;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.requestJsonObject;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.showToast;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.startSummonerActivity;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener, FreeChampFragment.FreeChampClickListener {
@@ -184,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                showLog("onMove");
                 return false;
             }
 
@@ -213,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void searchSummoner(final String query, final String region) {
         if (!isSummonerSelected) {
             isSummonerSelected = true;
-            if (version != null) {
+            if (!(version==null)&&!version.isEmpty()) {
                 summonerName = query.replace(" ", "").toLowerCase();
                 Utilities.requestJsonObject(Utilities.getSummonerUrl(region, StringEscapeUtils.escapeHtml4(summonerName)), new Response.Listener<JSONObject>() {
                     @Override
@@ -272,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        showLog("creating options menu");
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -458,7 +455,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        showLog("menu item clicked " + menuItem.getItemId());
+
         switch (menuItem.getItemId()) {
             case R.id.euw_item:
                 region = "euw";
@@ -501,7 +498,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
         invalidateOptionsMenu();
-        showLog("now region is " + region);
+
      /* if(typingName){
             searchView.setQuery("",false);
         }*/
@@ -525,7 +522,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onResponse(JSONObject response) {
                 try {
                     version = response.getString("dd");
-                    showLog(version);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
