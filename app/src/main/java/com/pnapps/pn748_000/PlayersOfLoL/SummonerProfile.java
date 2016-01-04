@@ -246,7 +246,7 @@ public class SummonerProfile extends Fragment {
                             JSONObject entry=array.getJSONObject(bestIndexes[i]).getJSONArray("entries").getJSONObject(0);
                             lpTxts[i].setText(entry.getInt("leaguePoints")
                                     + " League Points");
-                            wlTexts[i].setText(entry.getInt("wins")+" wins " + entry.getInt("losses")+" losses");
+                            wlTexts[i].setText("W/L: "+entry.getInt("wins")+"/" + entry.getInt("losses"));
                             if(entry.has("miniSeries")){
                                JSONObject series =getJsonObjectFromJson(entry,"miniSeries");
                                if(series!=null){

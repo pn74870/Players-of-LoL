@@ -185,7 +185,7 @@ public class ChampionsFragment extends Fragment {
 
     }
 
-    class ChampionStats implements Comparable<ChampionStats>, Parcelable {
+    static class ChampionStats implements Comparable<ChampionStats>, Parcelable {
         int kills, deaths, assists, cs, loses, wins, games;
         String champ;
 
@@ -210,7 +210,7 @@ public class ChampionsFragment extends Fragment {
             champ = in.readString();
         }
 
-        public final Creator<ChampionStats> CREATOR = new Creator<ChampionStats>() {
+        public final static Creator<ChampionStats> CREATOR = new Creator<ChampionStats>() {
             @Override
             public ChampionStats createFromParcel(Parcel in) {
                 return new ChampionStats(in);

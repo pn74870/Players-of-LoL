@@ -72,9 +72,10 @@
                 android:textSize="@dimen/active_match_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="W/L:0/0"
-                android:layout_marginLeft="95dp"
+                android:text="1000/100"
+                android:layout_marginLeft="@dimen/marginLeftPlayerWL"
                 android:layout_toRightOf="@id/champIcon"
+                android:paddingTop="@dimen/paddingTopPlayerWL"
                 android:id="@+id/wins_loses"
                 android:layout_centerVertical="true"/>
             <!--  android:layout_alignBottom="@id/summonerName"-->

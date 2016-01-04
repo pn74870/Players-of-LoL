@@ -11,4 +11,7 @@
     <dimen name="normal_screen_text_size">12sp</dimen>
     <dimen name="text_padding_normal_screen">3dp</dimen>
     <dimen name="marginLeftActiveMatchWL">115dp</dimen>
+    <dimen name="paddingTopPlayerWL">7dp</dimen>
+    <dimen name="marginLeftPlayerWL">80dp</dimen>
+    <dimen name="champRowTextSizeSmallScreen">12sp</dimen>
 </resources>

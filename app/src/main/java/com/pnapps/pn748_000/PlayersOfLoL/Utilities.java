@@ -555,7 +555,7 @@ public abstract class Utilities {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
-    public static void saveBitmapToSD(Bitmap bitmap, Context context, String name) {
+    public static boolean saveBitmapToSD(Bitmap bitmap, Context context, String name) {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             File folder = context.getExternalCacheDir();
             File file = new File(folder, name);
@@ -573,7 +573,9 @@ public abstract class Utilities {
                     e.printStackTrace();
                 }
             }
-        } else showToast("External storage was not found.", context);
+            return true;
+        }
+        return false;
     }
 
     public static Bitmap readBitmapFromSD(String name, Context context, int dpSize) {

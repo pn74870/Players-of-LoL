@@ -74,8 +74,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0/0"
-            android:layout_marginLeft="110dp"
+            android:layout_marginLeft="@dimen/marginLeftPlayerWL"
             android:layout_toRightOf="@id/champIcon"
+            android:paddingTop="@dimen/paddingTopPlayerWL"
             android:layout_centerVertical="true"
             android:id="@+id/wins_loses"/>
         <!--android:layout_alignBottom="@id/summonerName"-->

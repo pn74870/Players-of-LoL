@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -87,7 +86,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
     private JSONObject activeMatchJson;
     private boolean champsReceived = false, bansReceived = false, settingData = false;
     private int numbOfCompletedRunes, numbOfBans, numbOfCompletedMasteries;
-    private int lengthOfList;
+    private int lengthOfList=-1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,7 +112,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
         } else finish();
         playersList = new ArrayList<>();
         utilities = new Utilities() {
-            private int numberOfChampsReceived=0;
+            private int numberOfChampsReceived=0, numberOfEntriesReceived=0;
             @Override
             public void onResponseReceived(int index, String champName) {
                 if (index == BLUE_TEAM_ID) {
@@ -131,7 +130,11 @@ public class ActiveMatchActivity extends AppCompatActivity {
                         bansReceived = true;
                         if (!settingData && champsReceived) setData();
                     }
-                } else champNameReceived(champName, index);
+                } else {
+                    numberOfChampsReceived++;
+                    champsReceived=lengthOfList==numberOfChampsReceived&&lengthOfList==numberOfEntriesReceived;
+                    champNameReceived(champName, index);
+                }
 
             }
 
@@ -139,8 +142,8 @@ public class ActiveMatchActivity extends AppCompatActivity {
             public void onResponseReceived(int index, JSONArray array) {
 
                 try {
-                    numberOfChampsReceived++;
-                    champsReceived=lengthOfList==numberOfChampsReceived;
+                    numberOfEntriesReceived++;
+                    champsReceived=lengthOfList==numberOfChampsReceived&&lengthOfList==numberOfEntriesReceived;
                     onArrayReceived(array, index);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -213,7 +216,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
     private void getActiveMatch(JSONObject activeMatchObject, String region) {
 
 
-
         JSONArray participants = getJsonArrayFromJson(activeMatchObject, "participants");
         JSONArray bannedChamps = getJsonArrayFromJson(activeMatchObject, "bannedChampions");
         if (bannedChamps != null) {
@@ -233,7 +235,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
         }
         if (participants != null) {
 
-            Log.e("asd", "participants: " + participants.length());
 
             ActionBar bar = getSupportActionBar();
             if (bar != null)
@@ -311,7 +312,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
 
         }
     }
-//TODO fix
+
     void champNameReceived(final String name, final int index) {
         playersList.get(index).champ = name;
         if (index == ids.length - 1) utilities.getLeagueEntry(ids, region);
@@ -408,7 +409,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
             });
         }
     }
-    private void showRunesDialog(final Player player) throws JSONException { //TODO FIX!! DOES NOT SHOW THE LAST LINE
+    private void showRunesDialog(final Player player) throws JSONException {
         final JSONArray runes = player.runes;
         numbOfCompletedRunes = 0;
         final LinkedHashMap<String, Double> runeMap = new LinkedHashMap<>();
@@ -473,11 +474,11 @@ public class ActiveMatchActivity extends AppCompatActivity {
             }
         }
 
-        if (champsReceived) {
+        if (champsReceived && !settingData) {
             setData();
         }
     }
-//TODO fix champs problem
+
     private void setData() {
         if (champsReceived && bansReceived) {
             settingData = true;
@@ -624,7 +625,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
     }
 
 
-    class Player implements Parcelable{
+    static class Player implements Parcelable{
         String name, champ, tier, division;
         boolean blueTeam, unranked = true;
         int wins, loses, numbPlayed, lp, profileId, id;
@@ -658,7 +659,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
             }
         }
 
-        public final Creator<Player> CREATOR = new Creator<Player>() {
+        public static final Creator<Player> CREATOR = new Creator<Player>() {
             @Override
             public Player createFromParcel(Parcel in) {
                 return new Player(in);

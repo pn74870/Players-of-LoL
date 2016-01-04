@@ -46,7 +46,7 @@ public class MatchInfo implements Parcelable {
         parcel.writeString(type);
         if(win) parcel.writeInt(1);
         else parcel.writeInt(0);
-        //TODO finish
+
     }
     public static final Parcelable.Creator<MatchInfo> CREATOR
             = new Parcelable.Creator<MatchInfo>() {
