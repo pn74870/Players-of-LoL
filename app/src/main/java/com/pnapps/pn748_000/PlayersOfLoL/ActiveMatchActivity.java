@@ -34,8 +34,8 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
-import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY_AND;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ApiKeys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ApiKeys.API_KEY_AND;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_PARTICIPANTS;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_REGION;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.HTTP;
@@ -45,11 +45,15 @@ import static com.pnapps.pn748_000.PlayersOfLoL.Keys.PROFILE_ICON_ID;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_MASTERY;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_RUNE;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.URL_START_GLOBAL;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.calculateAverage;
 import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.createSummonerObject;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.formatStringOneAfterDec;
 import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getChampImg;
 import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getImage;
 import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getJsonArrayFromJson;
 import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getJsonObjectFromJson;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getKDA;
+import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getStatsUrl;
 import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.getSummonerUrl;
 import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.requestJsonObject;
 import static com.pnapps.pn748_000.PlayersOfLoL.Utilities.startSummonerActivity;
@@ -263,6 +267,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
                     playerObj.blueTeam = player.getInt("teamId") == 100;
                     playerObj.profileId = player.getInt(PROFILE_ICON_ID);
                     playerObj.id = ids[i];
+                    playerObj.champId=champID;
                     if (player.has("runes")) playerObj.runes = player.getJSONArray("runes");
                     if (player.has("masteries"))
                         playerObj.masteries = player.getJSONArray("masteries");
@@ -508,9 +513,9 @@ public class ActiveMatchActivity extends AppCompatActivity {
                 });
                 TextView name = (TextView) v.findViewById(R.id.summonerName);
                 TextView champName = (TextView) v.findViewById(R.id.champName);
-                TextView numberPlayed = (TextView) v.findViewById(R.id.numberPlayed);
+                final TextView numberPlayed = (TextView) v.findViewById(R.id.numberPlayed);
                 TextView winsLoses = (TextView) v.findViewById(R.id.wins_loses);
-                TextView kda = (TextView) v.findViewById(R.id.kda);
+                final TextView kda = (TextView) v.findViewById(R.id.kda);
                 TextView rank = (TextView) v.findViewById(R.id.rank);
                 TextView lp = (TextView) v.findViewById(R.id.lp);
                 Button profileBtn = (Button) buttonPanel.findViewById(R.id.profileBtn);
@@ -596,7 +601,31 @@ public class ActiveMatchActivity extends AppCompatActivity {
                         error.printStackTrace();
                     }
                 });
-
+                requestJsonObject(getStatsUrl(player.id, region), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONArray champions=getJsonArrayFromJson(response,"champions");
+                        if(champions!=null){
+                            for(int i=0; i<champions.length();i++){
+                                try {
+                                    JSONObject champ=champions.getJSONObject(i);
+                                    if(champ.getInt("id")==player.champId){
+                                        JSONObject stats=champ.getJSONObject("stats");
+                                        numberPlayed.setText(String.format("(%d)", stats.getInt("totalSessionsPlayed")));
+                                        kda.setText(getKDA(stats));
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
 
             }
 
@@ -619,16 +648,17 @@ public class ActiveMatchActivity extends AppCompatActivity {
                     }
                 });
             }
-        }
+
+
         loadingBar.setVisibility(View.GONE);
         parentLayout.setVisibility(View.VISIBLE);
-    }
+    }}
 
 
     static class Player implements Parcelable{
         String name, champ, tier, division;
         boolean blueTeam, unranked = true;
-        int wins, loses, numbPlayed, lp, profileId, id;
+        int wins, loses, numbPlayed, lp, profileId, id,champId;
         double k, d, a;
         JSONArray runes, masteries;
         AlertDialog runeDialog, masteryDialog;

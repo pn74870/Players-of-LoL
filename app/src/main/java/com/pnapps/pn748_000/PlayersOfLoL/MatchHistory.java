@@ -32,9 +32,9 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ApiKeys.API_KEY;
 
-import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY_AND;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ApiKeys.API_KEY_AND;
 
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON_SPELL_IMG;

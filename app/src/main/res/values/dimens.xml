@@ -5,12 +5,14 @@
     <dimen name="lp_size">12sp</dimen>
     <dimen name="match_history_left_margin">10dp</dimen>
     <dimen name="statistics_row_padding">3dp</dimen>
-    <dimen name="active_match_text_size">12sp</dimen>
+    <dimen name="active_match_text_size">11sp</dimen>
+    <dimen name="active_match_text_size_normal">12sp</dimen>
     <dimen name="active_match_border_width">2dp</dimen>
     <dimen name="no_ranked_games_txt_size">15sp</dimen>
     <dimen name="normal_screen_text_size">12sp</dimen>
     <dimen name="text_padding_normal_screen">3dp</dimen>
-    <dimen name="marginLeftActiveMatchWL">115dp</dimen>
+    <dimen name="marginLeftActiveMatchWL">110dp</dimen>
+    <dimen name="marginLeftActiveMatchWLsmall">100dp</dimen>
     <dimen name="paddingTopPlayerWL">7dp</dimen>
     <dimen name="marginLeftPlayerWL">80dp</dimen>
     <dimen name="champRowTextSizeSmallScreen">12sp</dimen>

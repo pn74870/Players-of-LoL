@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ApiKeys.API_KEY;
 
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_REGION;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.HTTP;

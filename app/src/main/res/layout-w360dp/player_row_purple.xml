@@ -30,11 +30,11 @@
                 />
 
             <TextView
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginLeft="5dp"
 
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:textSize="@dimen/active_match_text_size"
+                android:textSize="@dimen/active_match_text_size_normal"
                 android:text="Niko Belic123451"
                 android:id="@+id/summonerName"
                 android:layout_toRightOf="@id/champIcon"
@@ -46,7 +46,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="3dp"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:textSize="@dimen/active_match_text_size"
+                android:textSize="@dimen/active_match_text_size_normal"
                 android:textStyle="bold"
                 android:text="Riven"
                 android:id="@+id/champName"
@@ -57,11 +57,10 @@
             <TextView
 
                 android:layout_marginLeft="5dp"
-                android:textSize="@dimen/active_match_text_size"
+                android:textSize="@dimen/active_match_text_size_normal"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:textStyle="bold"
-                android:text="(10)"
+                android:text="(0)"
                 android:id="@+id/numberPlayed"
                 android:layout_toRightOf="@id/champName"
                 android:layout_toEndOf="@id/champName"
@@ -69,17 +68,17 @@
                 />
 
             <TextView
-                android:textSize="@dimen/active_match_text_size"
+                android:textSize="@dimen/active_match_text_size_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="W/L:0/0"
+                android:text="1000/1000"
                 android:layout_marginLeft="@dimen/marginLeftActiveMatchWL"
                 android:layout_toRightOf="@id/champIcon"
-                android:layout_centerVertical="true"
+                android:layout_alignBottom="@id/summonerName"
                 android:id="@+id/wins_loses"/>
             <!--android:layout_alignBottom="@id/summonerName"-->
             <ImageView
-                android:visibility="gone"
+
                 android:id="@+id/kda_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,11 +86,11 @@
                 android:layout_alignLeft="@id/wins_loses"
                 android:layout_below="@id/wins_loses"/>
             <TextView
-                android:visibility="gone"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/kda"
-                android:textSize="@dimen/active_match_text_size"
+                android:textSize="@dimen/active_match_text_size_normal"
 
                 android:layout_toRightOf="@id/kda_img"
                 android:layout_alignBottom="@id/champName"
@@ -122,17 +121,17 @@
                     android:text="@string/unranked"
 
                     android:id="@+id/rank"
-                    android:textSize="@dimen/active_match_text_size"/>
+                    android:textSize="@dimen/active_match_text_size_normal"/>
 
                 <TextView
-                    android:layout_gravity="right"
+                    android:layout_gravity="end"
                     android:layout_marginTop="4dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lp"
                     android:visibility="visible"
                     android:text="100 LP"
-                    android:textSize="@dimen/active_match_text_size"/>
+                    android:textSize="@dimen/active_match_text_size_normal"/>
             </LinearLayout>
 
 

@@ -59,9 +59,9 @@
                 android:layout_marginLeft="5dp"
                 android:textSize="@dimen/active_match_text_size"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:visibility="gone"
+
                 android:textStyle="bold"
-                android:text="(10)"
+                android:text="(0)"
                 android:id="@+id/numberPlayed"
                 android:layout_toRightOf="@id/champName"
                 android:layout_toEndOf="@id/champName"
@@ -72,16 +72,17 @@
                 android:textSize="@dimen/active_match_text_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1000/100"
-                android:layout_marginLeft="@dimen/marginLeftPlayerWL"
+                android:layout_marginLeft="@dimen/marginLeftActiveMatchWLsmall"
+                android:layout_marginStart="@dimen/marginLeftActiveMatchWLsmall"
                 android:layout_toRightOf="@id/champIcon"
-                android:paddingTop="@dimen/paddingTopPlayerWL"
+                android:layout_toEndOf="@id/champIcon"
+                android:layout_alignBottom="@id/summonerName"
                 android:id="@+id/wins_loses"
-                android:layout_centerVertical="true"/>
+                />
             <!--  android:layout_alignBottom="@id/summonerName"-->
 
             <ImageView
-                android:visibility="gone"
+
                 android:id="@+id/kda_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,7 +90,7 @@
                 android:layout_alignLeft="@id/wins_loses"
                 android:layout_below="@id/wins_loses"/>
             <TextView
-                android:visibility="gone"
+          
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/kda"
@@ -102,9 +103,9 @@
 
 
             <ImageView
-                android:padding="5dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:padding="2dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
 
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"

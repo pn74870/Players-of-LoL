@@ -20,7 +20,6 @@ import java.util.Locale;
  * Created by pn748_000 on 8/14/2015.
  */
 public class StatisticsFragment extends Fragment {
-    private static final String ARG_STATS = "statsJson";//TODO might need to delete
     private static final String STATE_STATS = "stateStats";
     private TableLayout table;
     private TextView pentas, quadras, triples, doubles, kills, killingSprees, mostKills, largestSpree, assists, gold, turrets, title;

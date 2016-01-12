@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Locale;
 
-import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ApiKeys.API_KEY;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_SUMMONER_OBJECT;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.DDRAGON_SPELL_IMG;
@@ -290,7 +290,11 @@ public abstract class Utilities {
         context.startActivity(intent);
     }
 
-
+public static String getKDA(JSONObject stats) throws JSONException{
+    return String.format(Locale.UK,"%.1f/%.1f/%.1f", calculateAverage(stats.getInt("totalChampionKills"), stats.getInt("totalSessionsPlayed")),
+            calculateAverage(stats.getInt("totalDeathsPerSession"), stats.getInt("totalSessionsPlayed")),
+            calculateAverage(stats.getInt("totalAssists"), stats.getInt("totalSessionsPlayed")));
+}
     public void champNameFromId(final int index, Context context, final int champId, final String region) {
         final SharedPreferences champIdPrefs = context.getSharedPreferences(context.getResources().getString(R.string.champIdPreferences), Context.MODE_PRIVATE);
         if (!champIdPrefs.contains(champId + "")) {

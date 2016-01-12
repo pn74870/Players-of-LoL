@@ -2,8 +2,6 @@ package com.pnapps.pn748_000.PlayersOfLoL;
 
 public interface Keys {
     String HTTP="https://";
-    String API_KEY="?api_key=36b32bbf-27f2-417b-8044-265d65332c18";
-    String API_KEY_AND="&api_key=36b32bbf-27f2-417b-8044-265d65332c18";
 
     String URL_START=".api.pvp.net/api/lol/";
     String URL_START_GLOBAL="global.api.pvp.net/api/lol/static-data/";
@@ -42,6 +40,10 @@ public interface Keys {
     String ARG_SUMMONER_OBJECT="summonerObject";
     String ARG_REGION="regionArgument";
     String ARG_PARTICIPANTS="participantsArgumen";
+ class ApiKeys {
 
+     protected static final String API_KEY_AND="&api_key=8d31ef66-6522-40c7-9086-551660a9eb67";
+     protected static final String API_KEY="?api_key=8d31ef66-6522-40c7-9086-551660a9eb67";
+ }
 
 }

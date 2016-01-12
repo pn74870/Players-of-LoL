@@ -3,32 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/playerLinearLayout">
-<android.support.v7.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-
-
-
-
-    app:cardUseCompatPadding="true"
-    >
-
-    <RelativeLayout
-        android:clickable="true"
-        android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
-        android:id="@+id/playerParentLayout"
-        android:background="@drawable/purple_ripple"
-        android:layout_gravity="center_horizontal|bottom">
+
+
+
+
+        app:cardUseCompatPadding="true"
+        >
+
+        <RelativeLayout
+            android:clickable="true"
+            android:orientation="horizontal" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:id="@+id/playerParentLayout"
+            android:background="@drawable/purple_ripple"
+            android:layout_gravity="center_horizontal|bottom">
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/champIcon"
-               />
+                />
 
             <TextView
                 android:layout_marginTop="10dp"
@@ -41,105 +40,108 @@
                 android:layout_toRightOf="@id/champIcon"
                 android:layout_toEndOf="@id/champIcon"
 
-                 />
-        <TextView
+                />
+            <TextView
 
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="3dp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:textSize="@dimen/active_match_text_size"
-            android:textStyle="bold"
-            android:text="Riven"
-            android:id="@+id/champName"
-            android:layout_toRightOf="@id/champIcon"
-            android:layout_toEndOf="@id/champIcon"
-            android:layout_below="@+id/summonerName"
-            />
-        <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="3dp"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textSize="@dimen/active_match_text_size"
+                android:textStyle="bold"
+                android:text="Riven"
+                android:id="@+id/champName"
+                android:layout_toRightOf="@id/champIcon"
+                android:layout_toEndOf="@id/champIcon"
+                android:layout_below="@+id/summonerName"
+                />
+            <TextView
 
-            android:layout_marginLeft="5dp"
-            android:textSize="@dimen/active_match_text_size"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:textStyle="bold"
-            android:text="(10)"
-            android:id="@+id/numberPlayed"
-            android:layout_toRightOf="@id/champName"
-            android:layout_toEndOf="@id/champName"
-            android:layout_alignBottom="@id/champName"
-            />
+                android:layout_marginLeft="5dp"
+                android:textSize="@dimen/active_match_text_size"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
 
-        <TextView
-           android:textSize="@dimen/active_match_text_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0/0"
-            android:layout_marginLeft="@dimen/marginLeftPlayerWL"
-            android:layout_toRightOf="@id/champIcon"
-            android:paddingTop="@dimen/paddingTopPlayerWL"
-            android:layout_centerVertical="true"
-            android:id="@+id/wins_loses"/>
-        <!--android:layout_alignBottom="@id/summonerName"-->
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/kda_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/score"
-            android:layout_alignLeft="@id/wins_loses"
-            android:layout_below="@id/wins_loses"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/kda"
-            android:textSize="@dimen/active_match_text_size"
-            android:visibility="gone"
-            android:layout_toRightOf="@id/kda_img"
-            android:layout_alignBottom="@id/champName"
-            android:text="0/0/0"
-            />
+                android:textStyle="bold"
+                android:text="(0)"
+                android:id="@+id/numberPlayed"
+                android:layout_toRightOf="@id/champName"
+                android:layout_toEndOf="@id/champName"
+                android:layout_alignBottom="@id/champName"
+                />
 
+            <TextView
+                android:textSize="@dimen/active_match_text_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/marginLeftActiveMatchWLsmall"
+                android:layout_marginStart="@dimen/marginLeftActiveMatchWLsmall"
+                android:layout_toRightOf="@id/champIcon"
+                android:layout_toEndOf="@id/champIcon"
+                android:layout_alignBottom="@id/summonerName"
+                android:id="@+id/wins_loses"
+                />
+            <!--  android:layout_alignBottom="@id/summonerName"-->
 
-        <ImageView
-            android:padding="5dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            <ImageView
 
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:id="@+id/tierIcon"
-            android:src="@drawable/provisional"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/tierIcon"
+                android:id="@+id/kda_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/score"
+                android:layout_alignLeft="@id/wins_loses"
+                android:layout_below="@id/wins_loses"/>
+            <TextView
 
-            android:orientation="vertical"
-            android:layout_centerVertical="true">
-        <TextView
-            android:layout_marginTop="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/unranked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/kda"
+                android:textSize="@dimen/active_match_text_size"
 
-            android:id="@+id/rank"
-            android:textSize="@dimen/active_match_text_size"/>
-
-        <TextView
-            android:layout_gravity="right"
-            android:layout_marginTop="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lp"
-           android:visibility="visible"
-            android:text="100 LP"
-            android:textSize="@dimen/active_match_text_size"/>
-        </LinearLayout>
+                android:layout_toRightOf="@id/kda_img"
+                android:layout_alignBottom="@id/champName"
+                android:text="0/0/0"
+                />
 
 
+            <ImageView
+                android:padding="2dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:id="@+id/tierIcon"
+                android:src="@drawable/provisional"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/tierIcon"
+
+                android:orientation="vertical"
+                android:layout_centerVertical="true">
+                <TextView
+                    android:layout_marginTop="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/unranked"
+
+                    android:id="@+id/rank"
+                    android:textSize="@dimen/active_match_text_size"/>
+
+                <TextView
+                    android:layout_gravity="right"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lp"
+                    android:visibility="visible"
+                    android:text="100 LP"
+                    android:textSize="@dimen/active_match_text_size"/>
+            </LinearLayout>
 
 
-    </RelativeLayout>
+
+
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
     <include layout="@layout/player_second_row"
         android:id="@+id/buttons"/>

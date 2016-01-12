@@ -46,7 +46,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.pnapps.pn748_000.PlayersOfLoL.Keys.API_KEY;
+import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ApiKeys.API_KEY;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_PARTICIPANTS;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.ARG_REGION;
 import static com.pnapps.pn748_000.PlayersOfLoL.Keys.HTTP;
@@ -246,7 +246,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     }
                 });
-            } else versionCheck();
+            } else {
+                showToast("No internet connection", getApplicationContext());
+                isSummonerSelected=false;
+                versionCheck();
+            }
         }
     }
 
