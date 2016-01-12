@@ -89,7 +89,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
     private int[] ids;
     private JSONObject activeMatchJson;
     private boolean champsReceived = false, bansReceived = false, settingData = false;
-    private int numbOfCompletedRunes, numbOfBans, numbOfCompletedMasteries;
+    private int  numbOfBans;
     private int lengthOfList=-1;
 
     @Override
@@ -376,7 +376,6 @@ public class ActiveMatchActivity extends AppCompatActivity {
     private void showMasteriesDialog(final Player player) throws JSONException {
         final JSONArray masteries=player.masteries;
         final int[] trees={0,0,0};
-        numbOfCompletedMasteries =0;
         for(int i=0;i<masteries.length();i++){
 
             final JSONObject mastery=masteries.getJSONObject(i);
@@ -394,8 +393,8 @@ public class ActiveMatchActivity extends AppCompatActivity {
                             case "Resolve": trees[2]+=mastery.getInt("rank");
                                 break;
                         }
-                        numbOfCompletedMasteries++;
-                        if(numbOfCompletedMasteries==masteries.length()) {
+                        player.numbOfCompletedMast++;
+                        if(player.numbOfCompletedMast==masteries.length()) {
                             AlertDialog.Builder builder=new AlertDialog.Builder(ActiveMatchActivity.this);
                             player.masteryDialog=builder.setTitle("Masteries").setPositiveButton("OK",null).setMessage("Ferocity/"+trees[0]+"\n"+
                                     "Cunning/"+trees[1]+"\n"+"Resolve/"+trees[2]+"\n").create();
@@ -416,7 +415,7 @@ public class ActiveMatchActivity extends AppCompatActivity {
     }
     private void showRunesDialog(final Player player) throws JSONException {
         final JSONArray runes = player.runes;
-        numbOfCompletedRunes = 0;
+
         final LinkedHashMap<String, Double> runeMap = new LinkedHashMap<>();
 
         for (int i = 0; i < runes.length(); i++) {
@@ -441,8 +440,8 @@ public class ActiveMatchActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        numbOfCompletedRunes++;
-                        if (numbOfCompletedRunes == runes.length()) {
+                        player.numbOfCompletedRunes++;
+                        if (player.numbOfCompletedRunes == runes.length()) {
                             player.runeDialog = createDialog(runeMap, "Runes");
                             player.runeDialog.show();
                         }
@@ -658,10 +657,11 @@ public class ActiveMatchActivity extends AppCompatActivity {
     static class Player implements Parcelable{
         String name, champ, tier, division;
         boolean blueTeam, unranked = true;
-        int wins, loses, numbPlayed, lp, profileId, id,champId;
+        int wins, loses, numbPlayed, lp, profileId, id,champId,numbOfCompletedMast=0,numbOfCompletedRunes=0;
         double k, d, a;
         JSONArray runes, masteries;
         AlertDialog runeDialog, masteryDialog;
+
 
         protected Player(){}
 
