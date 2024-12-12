@@ -1,25 +1,21 @@
 2015 side project. Android application for obtaining League of Legends player information from Riot API. Summoner profile, match history, active games, and other info. See https://apkcombo.com/players-of-lol/com.pnapps.lolplayers/.
 
-![Alt text](images/screenshot1.webp =300x)
-![Alt text](images/screenshot2.webp =300x)
-![Alt text](images/screenshot3.webp =300x)
-![Alt text](images/screenshot4.webp =300x)
-![Alt text](images/screenshot5.webp =300x)
-![Alt text](images/screenshot6.webp =300x)
-![Alt text](images/screenshot7.webp =300x)
-![Alt text](images/screenshot8.webp =300x)
+![Alt text](images/screenshot1.webp)
+![Alt text](images/screenshot2.webp)
+![Alt text](images/screenshot3.webp)
+![Alt text](images/screenshot4.webp)
+![Alt text](images/screenshot5.webp)
+![Alt text](images/screenshot6.webp)
+![Alt text](images/screenshot7.webp)
+![Alt text](images/screenshot8.webp)
 
 Players of LoL APP
 
 This app allows you to find the following information:
-
-Active games
-
-Match history
-
-Summoner profile
-
-Free champion rotation
+- Active games
+- Match history
+- Summoner profile
+- Free champion rotation
 
 Supported regions:
 NA, EUW, EUNE, LAN, LAS, OCE, RU.
